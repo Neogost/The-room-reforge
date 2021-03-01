@@ -74,7 +74,7 @@ export class RoomSourceUtils {
     let roomAvailable: Room = Game.rooms[source.roomName];
     if (roomAvailable) {
       if (id && !Game.getObjectById(id)) {
-        Logger.debug(scannedRoom.name + " : verifySources, delete : " + id);
+        Logger.debug(scannedRoom.name + " : verify Sources, delete : " + id);
         delete scannedRoom.memory.sources[id];
       } else {
         // Object exist, do nothing
