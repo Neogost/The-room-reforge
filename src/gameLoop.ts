@@ -4,6 +4,9 @@ import "prototypes/creep";
 import { Logger } from "./utils/Logger";
 import { Initializer } from "./utils/Initialisazer";
 import { RoomSourceUtils } from "./utils/room/RoomSourceUtils";
+import { RoomConstructionSiteUtils } from "./utils/room/RoomConstructionSiteUtils";
+import { RoomCreepUtils } from "./utils/room/RoomCreepUtils";
+import { RoomStructureUtils } from "./utils/room/RoomStructureUtils";
 
 /**
  * Definie the game structure execution. Each tick is an instance of this object. the `GameLoop` do everything is needed.
@@ -62,6 +65,9 @@ export class GameLoop {
     // Scan room to update/find source of energy/mineral/deposit
     _.forEach(Game.rooms, (room) => {
       RoomSourceUtils.scan(room);
+      RoomConstructionSiteUtils.scan(room);
+      RoomCreepUtils.scanHostile(room);
+      RoomStructureUtils.scan(room);
     });
   }
 
