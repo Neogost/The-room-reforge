@@ -73,7 +73,6 @@ export class RoomSourceUtils {
   private static verify(scannedRoom: Room, source: SourcesOptions, id: string | undefined): number {
     let roomAvailable: Room = Game.rooms[source.roomName];
     if (roomAvailable) {
-      Logger.info("room available : " + id);
       if (id && !Game.getObjectById(id)) {
         Logger.debug(scannedRoom.name + " : verifySources, delete : " + id);
         delete scannedRoom.memory.sources[id];
