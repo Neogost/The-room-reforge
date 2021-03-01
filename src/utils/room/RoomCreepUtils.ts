@@ -18,6 +18,7 @@ export class RoomCreepUtils {
    *  - NO_FULL_SCAN_DONE (-1004) : Scan execution is not complete, some element disturb the scan. Scan is part-executued
    */
   public static scanHostile(scannedRoom: Room): number {
+    Logger.info("Scan Hostile creeps : " + scannedRoom.name);
     let statut: number = OK;
     // Control existance of Creeps
     // Does it already exist ?
@@ -86,7 +87,7 @@ export class RoomCreepUtils {
       _.set(scannedRoom.memory, ["creeps", hostileCreep.id], {
         id: hostileCreep.id,
         roomName: hostileCreep.room!.name,
-        effect: hostileCreep?.effects,
+        effect: hostileCreep.effects,
         body: hostileCreep.body,
         hits: hostileCreep.hits,
         hitsMax: hostileCreep.hitsMax,
@@ -99,7 +100,7 @@ export class RoomCreepUtils {
       _.set(scannedRoom.memory["creeps"], hostileCreep.id, {
         id: hostileCreep.id,
         roomName: hostileCreep.room!.name,
-        effect: hostileCreep?.effects,
+        effect: hostileCreep.effects,
         body: hostileCreep.body,
         hits: hostileCreep.hits,
         hitsMax: hostileCreep.hitsMax,
