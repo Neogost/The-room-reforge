@@ -74,7 +74,7 @@ export class RoomConstructionSiteUtils {
     // Add in memory
     if (data === undefined) {
       _.set(scannedRoom.memory, ["constructionsSites", cs.id], {
-        roomName: cs.room.name,
+        roomName: cs.room?.name,
         type: cs.structureType,
         owner: cs.owner.username
       } as ConstructionSiteOptions);
@@ -82,7 +82,7 @@ export class RoomConstructionSiteUtils {
     // Update memory
     else {
       _.set(scannedRoom.memory["constructionsSites"], cs.id, {
-        roomName: cs.room.name,
+        roomName: cs.room?.name,
         owner: cs.owner.username,
         type: cs.structureType
       } as ConstructionSiteOptions);
@@ -90,7 +90,7 @@ export class RoomConstructionSiteUtils {
   }
 
   /**
-   * @description Check if a constructions site exist in a ‘scannedRoom‘. If not, delete it form memory
+   * @description Check if a construction site exist in a ‘scannedRoom‘. If not, delete it form memory
    * @param scannedRoom Room who are scanned
    * @param cs construction site to verify
    * @param id Id of the construction site to verify
