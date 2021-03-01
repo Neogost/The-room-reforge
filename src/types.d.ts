@@ -71,6 +71,10 @@ interface LinkedMemoryMap<T> {
 interface ScoutMemory {
   [index: string]: ScoutOptions;
 }
+
+interface HostileCreepMemoryMap<T> {
+  [index: string]: T;
+}
 interface StructureLinkMemory {
   [index: string]: StructureLinkOptions;
 }
@@ -89,12 +93,11 @@ interface RoomMemory {
   scouted: ScoutMemory;
   /** Links in the room */
   links: StructureLinkMemory;
-
+  /** Hostile creep in the room */
+  creeps: HostileCreepMemoryMap<HostileCreepOptions>;
   // ------ Scouted -------
   /** Last time where the room was scouted */
   lastScan: number;
-  /** Creeps in the room. Only use during scoot */
-  creeps: Array<CreepOptions>;
 }
 
 interface RoomPosition {

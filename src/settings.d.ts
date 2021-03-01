@@ -80,11 +80,43 @@ interface SourcesOptions {
   /** Type of the source : SOURCE/MINERAL/DEPOSIT */
   type: string;
 }
-interface CreepOptions {
+
+/**
+ * Structure of the Creep options in memory room
+ */
+interface HostileCreepOptions {
+  /** Nome of the room where is the constructions sites */
+  roomName: string;
   /** owner of the creep */
   owner: string;
   /** bodypart of the creep */
   body: Array<BodyPartDefinition>;
+  /** Bonus applied on the creep */
+  effect: RoomObjectEffect[];
+
+  /** The current amount of hit points of the creep. */
+  hits: number;
+  /** The maximum amount of hit points of the creep. */
+  hitsMax: number;
+  /** A unique object identificator. You can use Game.getObjectById method to retrieve an object instance by its id. */
+  id: Id<Creep>;
+
+  /** The remaining amount of game ticks after which the creep will die. */
+  tickToLive: number;
+  /** Does the creep is hostile to me ?  */
+  hostile: boolean;
+}
+
+/**
+ * Structure of an effect on a creep. An effect is a buff who upgrade a creep.
+ */
+interface EffectsOptions {
+  /** Effect ID of the applied effect. Can be either natural effect ID or Power ID. */
+  effect: number;
+  /** Power level of the applied effect. Absent if the effect is not a Power effect. */
+  level?: number;
+  /** How many ticks will the effect last. */
+  tricksRemaining: number;
 }
 /**
  * Structure of the consus options of a main room
