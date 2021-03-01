@@ -51,6 +51,13 @@ export class Initializer {
     } else {
       Logger.info(room.name + " - Scouted initialized");
     }
+
+    if (!this.initializeCreeps(room)) {
+      Logger.warning(room.name + " - Creeps is already exist");
+    } else {
+      Logger.info(room.name + " - Creeps initialized");
+    }
+
     if (!this.initializeSettings()) {
       Logger.info("Settings initialized");
     }
@@ -176,6 +183,20 @@ export class Initializer {
     return statut;
   }
 
+  /**
+   * Initialise the properties creeps to a room
+   * @param room room to initialize
+   */
+  public static initializeCreeps(room: Room): boolean {
+    let statut: boolean = false;
+
+    // If not exist, initialize
+    if (!room.memory.creeps) {
+      _.set(room.memory, ["creeps"], {});
+      statut = true;
+    }
+    return statut;
+  }
   /**
    * Initialize settings of the IA
    */
