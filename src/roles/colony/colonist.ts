@@ -7,7 +7,7 @@ import {
 } from "../../utils/ConstantUtils";
 import { Traveler } from "../../utils/Traveler";
 import { Logger } from "../../utils/Logger";
-import { List } from "lodash";
+import { List, values } from "lodash";
 import { unwatchFile } from "fs";
 
 /**
@@ -51,6 +51,10 @@ export class ColonistMemory implements CreepMemory {
   _trav: any;
   _travel: any;
 
+  /**
+   * Initialize a Colonist.
+   * @param currentRoom Room where the creep is actualy
+   */
   constructor(currentRoom: Room) {
     this.homeRoomName = currentRoom.name;
     this.workingStation = currentRoom.name;
@@ -168,7 +172,7 @@ function canUpgradeController(controller: StructureController | undefined): bool
 function buildSomething(creep: Colonist, room: Room): number {
   if (!creep.memory.targetId) {
     // NOTE : Réfléchir, le colon a t'il besoin d'etre intélligent et de choisir les batiments prioritaire ?
-    let constructionsSites: List<ConstructionSite> = room.find(FIND_CONSTRUCTION_SITES);
+    let constructionsSites: ConstructionSiteMemoryMap<ConstructionSiteOptions> = room.memory.constructionsSites;
     // Take first element
     let constructionSiteToWork = constructionsSites != null ? constructionsSites[0] : null;
     if (!constructionSiteToWork) {
@@ -180,6 +184,11 @@ function buildSomething(creep: Colonist, room: Room): number {
   let target: ConstructionSite | Structure | Source | null = Game.getObjectById(creep.memory.targetId!);
   // If target does't exist or the id is not a `ConstructionSite` reset memory.
   if (!target || target instanceof Structure) {
+    // Check if the constructions site exist in memory
+    // delete it because it doesn't exist now
+    if (creep.memory.targetId && room.memory.constructionsSites[creep.memory.targetId]) {
+      delete room.memory.constructionsSites[creep.memory.targetId];
+    }
     resetTargetInMemory(creep);
     return ERR_INVALID_TARGET;
   }
@@ -335,7 +344,7 @@ function resetTargetInMemory(creep: Colonist) {
  * @param creep Creep who see his memory modify
  * @param target Target to set in memory.
  */
-function setTargetInMemory(creep: Colonist, target: Structure | Source | ConstructionSite, type: string) {
+function setTargetInMemory(creep: Colonist, target: ConstructionSiteOptions | Structure | Source, type: string) {
   creep.memory.targetId = target.id;
   creep.memory._targetPos = target.pos;
   creep.memory.targetType = type;

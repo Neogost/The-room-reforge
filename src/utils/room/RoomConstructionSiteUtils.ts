@@ -77,21 +77,25 @@ export class RoomConstructionSiteUtils {
     // Add in memory
     if (data === undefined) {
       _.set(scannedRoom.memory, ["constructionsSites", cs.id], {
+        id: cs.id,
         roomName: cs.room?.name,
         type: cs.structureType,
         owner: cs.owner.username,
         progress: cs.progress,
-        progressTotal: cs.progressTotal
+        progressTotal: cs.progressTotal,
+        pos: cs.pos
       } as ConstructionSiteOptions);
     }
     // Update memory
     else {
       _.set(scannedRoom.memory["constructionsSites"], cs.id, {
+        id: cs.id,
         roomName: cs.room?.name,
         owner: cs.owner.username,
         type: cs.structureType,
         progress: cs.progress,
-        progressTotal: cs.progressTotal
+        progressTotal: cs.progressTotal,
+        pos: cs.pos
       } as ConstructionSiteOptions);
     }
   }

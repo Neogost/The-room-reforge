@@ -104,6 +104,7 @@ export class RoomSourceUtils {
     // NOTE : Cette méthode gère la sauvegarde de l'entité SourceOption
     if (data === undefined) {
       _.set(scannedRoom.memory, ["sources", source.id], {
+        id: source.id,
         roomName: source.room!.name,
         type: type
       } as SourcesOptions);
@@ -114,6 +115,7 @@ export class RoomSourceUtils {
       let lastSpawn = scannedRoom.memory["sources"][source.id as any].lastSpawn;
       // update
       _.set(scannedRoom.memory["sources"], source.id, {
+        id: source.id,
         roomName: source.room!.name,
         type: type,
         lastSpawn: lastSpawn

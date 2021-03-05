@@ -30,7 +30,8 @@ describe("Room Construction Site Utils, ", () => {
         progress: 1,
         progressTotal: 100,
         room: constructionSiteRoom,
-        structureType: "extension"
+        structureType: "extension",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneConstructionSite")
       });
       const constructionSiteOption1 = mockInstanceOf<ConstructionSiteOptions>({
         owner: "neogost",
@@ -102,7 +103,8 @@ describe("Room Construction Site Utils, ", () => {
         progress: 1,
         progressTotal: 100,
         room: constructionSiteRoom,
-        structureType: "extension"
+        structureType: "extension",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneConstructionSite")
       });
       const constructionSiteOption1 = mockInstanceOf<ConstructionSiteOptions>({
         owner: "neogost",
@@ -178,7 +180,8 @@ describe("Room Construction Site Utils, ", () => {
         progress: 1,
         progressTotal: 100,
         room: constructionSiteRoom,
-        structureType: "extension"
+        structureType: "extension",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneConstructionSite")
       });
       const constructionSiteOption1 = mockInstanceOf<ConstructionSiteOptions>({
         owner: "neogost",
@@ -248,7 +251,8 @@ describe("Room Construction Site Utils, ", () => {
         progress: 1,
         progressTotal: 100,
         room: constructionSiteRoom,
-        structureType: "extension"
+        structureType: "extension",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneConstructionSite")
       });
       const constructionSiteOption1 = mockInstanceOf<ConstructionSiteOptions>({
         owner: "neogost",
@@ -324,7 +328,8 @@ describe("Room Construction Site Utils, ", () => {
         progress: 1,
         progressTotal: 100,
         room: constructionSiteRoom,
-        structureType: "extension"
+        structureType: "extension",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneConstructionSite")
       });
 
       const constructionSite2 = mockInstanceOf<ConstructionSite>({
@@ -333,7 +338,8 @@ describe("Room Construction Site Utils, ", () => {
         progress: 1,
         progressTotal: 100,
         room: constructionSiteRoom,
-        structureType: "extension"
+        structureType: "extension",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneConstructionSite")
       });
       const constructionSiteOption1 = mockInstanceOf<ConstructionSiteOptions>({
         owner: "neogost",
@@ -407,7 +413,8 @@ describe("Room Construction Site Utils, ", () => {
         progress: 1,
         progressTotal: 100,
         room: constructionSiteRoom,
-        structureType: "extension"
+        structureType: "extension",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneConstructionSite")
       });
       const constructionSiteOption1 = mockInstanceOf<ConstructionSiteOptions>({
         owner: "neogost",
@@ -508,7 +515,8 @@ describe("Room Construction Site Utils, ", () => {
         progress: 1,
         progressTotal: 100,
         room: constructionSiteRoom,
-        structureType: "extension"
+        structureType: "extension",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneConstructionSite")
       });
       const constructionSiteOption1 = mockInstanceOf<ConstructionSiteOptions>({
         owner: "neogost",

@@ -53,6 +53,8 @@ interface RampartSettings {
  * For a room who is mine, room's structure include linkedRoom structure
  */
 interface StructureOptions {
+  /** Id of the structure */
+  id: Id<Structure>;
   /** Structure resquest healing */
   needRepair: boolean;
   /** The room name where the structure is */
@@ -69,6 +71,8 @@ interface StructureOptions {
  * Structure of the Constructions site options in memory room
  */
 interface ConstructionSiteOptions {
+  /** Id of the construction site */
+  id: Id<ConstructionSite>;
   /** Nome of the room where is the constructions sites */
   roomName: string;
   /** Owner of the structure */
@@ -79,12 +83,16 @@ interface ConstructionSiteOptions {
   progress: number;
   /** Total effort needed to finish the construction */
   progressTotal: number;
+  /** position of the construction site */
+  pos: RoomPosition;
 }
 
 /**
  * Structure of the Sources/Deposit/Minerals options in memory room
  */
 interface SourcesOptions {
+  /** Id of the source */
+  id: Id<Source | Mineral | Deposit>;
   /** Last ingame time where a creep was spawn for this structure */
   lastSpawn?: number;
   /** Nome of the room where is the constructions sites */
