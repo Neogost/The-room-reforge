@@ -7,6 +7,9 @@ import { RoomSourceUtils } from "./utils/room/RoomSourceUtils";
 import { RoomConstructionSiteUtils } from "./utils/room/RoomConstructionSiteUtils";
 import { RoomCreepUtils } from "./utils/room/RoomCreepUtils";
 import { RoomStructureUtils } from "./utils/room/RoomStructureUtils";
+import spawners from "./rooms/spawner";
+import { CREEP_COLONIST } from "./utils/ConstantUtils";
+import roleColonist, { Colonist } from "./roles/colony/colonist";
 
 /**
  * Definie the game structure execution. Each tick is an instance of this object. the `GameLoop` do everything is needed.
@@ -23,6 +26,7 @@ export class GameLoop {
     let foundTask = this.loadTasks();
 
     // Scan rooms to find informations and tasks to do
+    Logger.info("First Scan");
     this.scanForNewTasks(true);
 
     // Save the state, do memory management
@@ -63,12 +67,15 @@ export class GameLoop {
    */
   public scanForNewTasks(define: boolean) {
     // Scan room to update/find source of energy/mineral/deposit
-    _.forEach(Game.rooms, (room) => {
-      RoomSourceUtils.scan(room);
-      RoomConstructionSiteUtils.scan(room);
-      RoomCreepUtils.scanHostile(room);
-      RoomStructureUtils.scan(room);
-    });
+    // scan only if define is true
+    if (define) {
+      _.forEach(Game.rooms, (room) => {
+        RoomSourceUtils.scan(room);
+        RoomConstructionSiteUtils.scan(room);
+        RoomCreepUtils.scanHostile(room);
+        RoomStructureUtils.scan(room);
+      });
+    }
   }
 
   /**
@@ -108,7 +115,23 @@ export class GameLoop {
    */
   public executeFlagsTasks() {}
 
-  private executeStructureTask() {}
+  private executeStructureTask() {
+    _.forEach(Game.rooms, (room: Room) => {
+      if (room.controller && room.controller.my) {
+        spawners.run(room);
+      }
+    });
+  }
 
-  private executeCreepTask() {}
+  private executeCreepTask() {
+    _.forEach(Game.creeps, (creep) => {
+      switch (creep.memory.role) {
+        case CREEP_COLONIST:
+          roleColonist.run(creep as Colonist);
+          return;
+        default:
+          break;
+      }
+    });
+  }
 }

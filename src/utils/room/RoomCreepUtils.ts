@@ -19,6 +19,7 @@ export class RoomCreepUtils {
    */
   public static scanHostile(scannedRoom: Room): number {
     Logger.info("Scan Hostile creeps : " + scannedRoom.name);
+    let AnalyseCPUStart = Game.cpu.getUsed();
     let statut: number = OK;
     // Control existance of Creeps
     // Does it already exist ?
@@ -31,6 +32,8 @@ export class RoomCreepUtils {
     let hostilesCreepsInScannedRoom = scannedRoom.find(FIND_HOSTILE_CREEPS);
     this.saveOrUpdateAll(scannedRoom, hostilesCreepsInScannedRoom);
 
+    let AnalyseCPUEnd = Game.cpu.getUsed();
+    Logger.debug(scannedRoom.name + "Scan Structure : " + (AnalyseCPUEnd - AnalyseCPUStart));
     return statut;
   }
 

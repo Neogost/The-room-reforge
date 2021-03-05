@@ -10,6 +10,11 @@ const settings = mockInstanceOf<Settings>({
   rampartMaxHits: [rampartLevels1]
 });
 
+const cpuMock = mockInstanceOf<CPU>({
+  getUsed: () => {
+    return 0;
+  }
+});
 mockGlobal<Memory>("Memory", {
   // @ts-ignore
   settings: settings
@@ -73,7 +78,8 @@ describe("Room Structure Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneStructure: origineRoomWithOneStructure }
+        rooms: { origineRoomWithOneStructure: origineRoomWithOneStructure },
+        cpu: cpuMock
       });
 
       let result: number = RoomStructureUtils.scan(origineRoomWithOneStructure);
@@ -137,7 +143,8 @@ describe("Room Structure Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneStructure: origineRoomWithOneStructure }
+        rooms: { origineRoomWithOneStructure: origineRoomWithOneStructure },
+        cpu: cpuMock
       });
 
       let result: number = RoomStructureUtils.scan(origineRoomWithOneStructure);
@@ -192,7 +199,8 @@ describe("Room Structure Utils, ", () => {
                 return null;
             }
           },
-          rooms: {}
+          rooms: {},
+          cpu: cpuMock
         },
         true
       );
@@ -255,7 +263,8 @@ describe("Room Structure Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneStructure: origineRoomWithOneStructure }
+        rooms: { origineRoomWithOneStructure: origineRoomWithOneStructure },
+        cpu: cpuMock
       });
 
       let result: number = RoomStructureUtils.scan(origineRoomWithOneStructure);
@@ -349,7 +358,8 @@ describe("Room Structure Utils, ", () => {
         rooms: {
           origineRoomWithALinkedRoom: origineRoomWithALinkedRoom,
           linkedRoomWithOneStructure: linkedRoomWithOneStructure
-        }
+        },
+        cpu: cpuMock
       });
 
       let result: number = RoomStructureUtils.scan(origineRoomWithALinkedRoom);
@@ -443,7 +453,8 @@ describe("Room Structure Utils, ", () => {
           },
           rooms: {
             origineRoomWithALinkedRoom: origineRoomWithALinkedRoom
-          }
+          },
+          cpu: cpuMock
         },
         true
       );

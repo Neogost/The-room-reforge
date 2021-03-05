@@ -76,7 +76,9 @@ export class RoomConstructionSiteUtils {
       _.set(scannedRoom.memory, ["constructionsSites", cs.id], {
         roomName: cs.room?.name,
         type: cs.structureType,
-        owner: cs.owner.username
+        owner: cs.owner.username,
+        progress: cs.progress,
+        progressTotal: cs.progressTotal
       } as ConstructionSiteOptions);
     }
     // Update memory
@@ -84,7 +86,9 @@ export class RoomConstructionSiteUtils {
       _.set(scannedRoom.memory["constructionsSites"], cs.id, {
         roomName: cs.room?.name,
         owner: cs.owner.username,
-        type: cs.structureType
+        type: cs.structureType,
+        progress: cs.progress,
+        progressTotal: cs.progressTotal
       } as ConstructionSiteOptions);
     }
   }

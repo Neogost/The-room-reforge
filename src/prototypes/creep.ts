@@ -1,5 +1,5 @@
-// import { Traveler } from "../utils/Traveler";
-// import { ERR_NO_TARGET } from "../utils/ConstantUtils";
+import { Traveler } from "../utils/Traveler";
+import { ERR_NO_TARGET } from "../utils/ConstantUtils";
 
 // Creep.prototype.harvestEnergy = function harvestEnergy(): number {
 //   //  TO DO : result value
@@ -8,17 +8,6 @@
 //   // If a target is set in memory, take it
 //   target = Game.getObjectById(this.memory.targetedSource);
 
-//   // If a forced target is set, take it
-//   if (this.memory.forcedTargetedSource) {
-//     target = Game.getObjectById(this.memory.forcedTargetedSource);
-//     // target not exist because no vision
-//     if (!target) {
-//       let targetRoomName = this.memory.targetRoomName;
-//       if (targetRoomName != this.room.name) {
-//         return Traveler.travelTo(this, new RoomPosition(25, 25, targetRoomName));
-//       }
-//     }
-//   }
 //   // if there are no sources or not available sources
 //   if (!target || (!target.pos.getOpenPositions().length && !this.pos.isNearTo(target))) {
 //     delete this.memory.targetedSource;

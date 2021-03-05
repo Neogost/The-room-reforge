@@ -4,6 +4,12 @@ import { NO_FULL_SCAN_DONE, NO_FULL_SCAN_DONE_LINKED } from "../ConstantUtils";
 import { RoomConstructionSiteUtils } from "./RoomConstructionSiteUtils";
 import { RoomCreepUtils } from "./RoomCreepUtils";
 
+const cpuMock = mockInstanceOf<CPU>({
+  getUsed: () => {
+    return 0;
+  }
+});
+
 describe("Room Creeps Utils, ", () => {
   describe("scan", () => {
     it("should scan, room with 1 hostile creep, no problem during the scan", () => {
@@ -88,7 +94,8 @@ describe("Room Creeps Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneHostileCreep: origineRoomWithOneHostileCreep }
+        rooms: { origineRoomWithOneHostileCreep: origineRoomWithOneHostileCreep },
+        cpu: cpuMock
       });
 
       let result: number = RoomCreepUtils.scanHostile(origineRoomWithOneHostileCreep);
@@ -179,7 +186,8 @@ describe("Room Creeps Utils, ", () => {
                 return null;
             }
           },
-          rooms: {}
+          rooms: {},
+          cpu: cpuMock
         },
         true
       );
@@ -266,7 +274,8 @@ describe("Room Creeps Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneHostileCreep: origineRoomWithOneHostileCreep }
+        rooms: { origineRoomWithOneHostileCreep: origineRoomWithOneHostileCreep },
+        cpu: cpuMock
       });
 
       let result: number = RoomCreepUtils.scanHostile(origineRoomWithOneHostileCreep);
@@ -337,7 +346,8 @@ describe("Room Creeps Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneHostileCreep: origineRoomWithOneHostileCreep }
+        rooms: { origineRoomWithOneHostileCreep: origineRoomWithOneHostileCreep },
+        cpu: cpuMock
       });
 
       let result: number = RoomCreepUtils.scanHostile(origineRoomWithOneHostileCreep);
