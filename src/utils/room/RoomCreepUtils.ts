@@ -33,7 +33,7 @@ export class RoomCreepUtils {
     this.saveOrUpdateAll(scannedRoom, hostilesCreepsInScannedRoom);
 
     let AnalyseCPUEnd = Game.cpu.getUsed();
-    Logger.debug(scannedRoom.name + "Scan Structure : " + (AnalyseCPUEnd - AnalyseCPUStart));
+    Logger.debug(scannedRoom.name + "Scan Creep execution use : " + (AnalyseCPUEnd - AnalyseCPUStart));
     return statut;
   }
 
