@@ -90,6 +90,7 @@ interface RoomMemory {
   /** Linked room to the room */
   linked: LinkedMemoryMap<LinkedRoomOptions>;
   /** Scouted room by the room */
+  // FIXME : A faire quand je serais au scouting
   scouted: ScoutMemory;
   /** Links in the room */
   links: StructureLinkMemory;
