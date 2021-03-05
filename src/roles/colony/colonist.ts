@@ -9,6 +9,8 @@ import { Traveler } from "../../utils/Traveler";
 import { Logger } from "../../utils/Logger";
 import { List, values } from "lodash";
 import { unwatchFile } from "fs";
+import { SOURCE_SOURCE_OPTION } from "../../utils/ConstantUtils";
+import { RoomPositionUtils } from "../../utils/RoomPositionUtils";
 
 /**
  * @description A colonist is there to help a new colonist take her place in the empire.
@@ -119,7 +121,7 @@ const roleColonist = {
     // Time to harvest,
     else {
       // find a target and harvest it
-      harvestEnergy(creep);
+      harvestEnergy(creep, room);
 
       // try to witch mode
       tryToSwitchMode(creep);
@@ -265,9 +267,10 @@ function tryToSwitchMode(creep: Colonist) {
 /**
  * @description find a source of energy in the room and harvest this target
  * @param creep creep who try to harverst a source of energy
+ * @param room Room where the creep try to harverst
  * @returns statut of execution
  */
-function harvestEnergy(creep: Colonist): number {
+function harvestEnergy(creep: Colonist, room: Room): number {
   //  TO DO : result value
   let target: Source | Structure | ConstructionSite | undefined | null;
   // If a target is set in memory, take it
@@ -281,7 +284,7 @@ function harvestEnergy(creep: Colonist): number {
     (!target.pos.getOpenPositions().length && !creep.pos.isNearTo(target))
   ) {
     resetTargetInMemory(creep);
-    target = findEnergySource(creep);
+    target = findEnergySource(creep, room);
   }
 
   // If source exit in a room available
@@ -302,21 +305,23 @@ function harvestEnergy(creep: Colonist): number {
 /**
  * @description Find in the room the sources of energy who can be harvest.
  * @param creep Creep who try to find an energy sources
+ * @param room Room where the creep try to find energy source
  * @returns Source of energy. If no one is find, return `undefined`
  */
-function findEnergySource(creep: Colonist): Source | undefined {
+function findEnergySource(creep: Colonist, room: Room): Source | undefined {
   let source: Source | Structure | ConstructionSite | undefined | null;
   // S'il y a une source en mémoire, on la récupère
   if (creep.memory.targetId) {
     source = Game.getObjectById(creep.memory.targetId);
   }
   if (!source || !(source instanceof Source)) {
-    let sources = creep.room.find(FIND_SOURCES);
-    if (sources.length) {
-      source = _.find(sources, function (s) {
+    let sourcesInMemory = room.memory.sources;
+    if (sourcesInMemory) {
+      let sourceOptionFind = _.find(sourcesInMemory, function (s) {
         // On cherche s'il y a des places disponible autour de la source
-        return s.pos.getOpenPositions().length > 0;
+        return s.type === SOURCE_SOURCE_OPTION && RoomPositionUtils.getOpenPositions(s.pos).length > 0;
       });
+      source = <Source>Game.getObjectById(sourceOptionFind!.id);
     }
   }
   // On récupère les sources de la room du creep
