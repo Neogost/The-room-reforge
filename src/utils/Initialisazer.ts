@@ -74,6 +74,7 @@ export class Initializer {
     if (!room.memory.consus) {
       _.set(room.memory, ["consus"], {
         // Colony
+        colonist: 3,
         workers: 2,
         upgraders: 5,
         builders: 1,
@@ -206,7 +207,8 @@ export class Initializer {
       _.set(Memory, ["settings"], {
         logLevel: 1,
         rampartMaxHits: SETTINGS_RAMPARTS_BY_LEVEL,
-        repairIndicator: 0.9
+        repairIndicator: 0.9,
+        colonisation: { levelToMaintain: 2 }
       } as Settings);
       statut = true;
       Logger.info("Settings initialzed");

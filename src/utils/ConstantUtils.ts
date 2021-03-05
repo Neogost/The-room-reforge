@@ -1,6 +1,12 @@
 // ------------------------------------------------
 // LIST OF ALL ERROR WHO THE ROOMS ENTITY CAN THROW
 // ------------------------------------------------
+// Creep's type
+export const CREEP_COLONIST = "colonist";
+export const CREEP_HARVESTER = "harvester";
+export const CREEP_BUILDER = "builder";
+export const CREEP_UPGRADER = "upgrader";
+export const CREEP_MANAGER = "manager";
 
 // Creep's action
 export const ERR_NO_TARGET = -1000;
@@ -10,6 +16,8 @@ export const ERR_CANT_MOVE = -1003;
 export const ERR_NO_AVAILABLE_CAPACITY = -1005;
 export const ERR_NOT_IN_RIGHT_ROOM = -1006;
 export const ERR_NO_RESOURCE = -1007;
+export const ERR_NO_WORKING_STATION = -1008;
+export const ERR_NOTHING_TO_DO = -1009;
 
 // Spawn's action
 export const ERR_FULL_CREEP: number = -200;
@@ -25,7 +33,10 @@ export const NEED_A_SCAN = 5000;
 
 // Traveler
 export const TRAVELER_MOVE = 1000;
+// Divers, a voir si je dois le conserver
 
+export const CONSTRUCTION_SITE_TYPE: string = "constructionSite";
+export const STRUCTURE_TYPE: string = "structure";
 // Settings Constants
 export const SETTINGS_RAMPARTS_BY_LEVEL = [
   { level: 1, maxHits: 0 },
