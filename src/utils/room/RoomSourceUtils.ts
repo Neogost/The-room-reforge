@@ -24,6 +24,7 @@ export class RoomSourceUtils {
    */
   public static scan(scannedRoom: Room): number {
     Logger.info("Scan Sources : " + scannedRoom.name);
+    let AnalyseCPUStart = Game.cpu.getUsed();
     let statut: number = OK;
     // Control existance of the source
     // Does it already exist ?
@@ -58,6 +59,8 @@ export class RoomSourceUtils {
         Logger.warning(scannedRoom.name + " : Cannot scan linked room : " + linkedRoomName);
       }
     });
+    let AnalyseCPUEnd = Game.cpu.getUsed();
+    Logger.debug(scannedRoom.name + "Scan Structure : " + (AnalyseCPUEnd - AnalyseCPUStart));
     return statut;
   }
 

@@ -1,11 +1,6 @@
 import { List } from "lodash";
-import { Harvester, HarvesterMemory } from "../roles/colony/harvester";
-import { BuilderMemory, Builder } from "../roles/colony/builder";
-import { UpgraderMemory } from "../roles/colony/upgrader";
-import { Upgrader } from "../roles/colony/upgrader";
-import { AssignedHarvesterMemory, AssignedHarvester } from "../roles/colony/assingedHarvester";
-import { CarrierMemory, Carrier } from "../roles/colony/carrier";
-import { Reservist, ReservistMemory } from "../roles/colony/reservist";
+import { Colonist, ColonistMemory } from "../roles/colony/colonist";
+
 import {
   ERR_NO_SPAWN_SELECTED,
   ERR_NO_ROLE_FOR_CREEP,
@@ -61,16 +56,30 @@ function getBody(segment: List<BodyPartConstant>, room: Room, limitedBody?: numb
  * @param room Room where is the spawner
  * @returns spawning statut
  */
-function spawnHarvester(spawn: StructureSpawn, room: Room): number {
-  return spawnGenericCreep(spawn, room, "harvester", [WORK, CARRY, MOVE], 0, 2, {
-    memory: new HarvesterMemory(room)
+// function spawnHarvester(spawn: StructureSpawn, room: Room): number {
+//   // FIXME : Body a rendre paramettrable
+//   return spawnGenericCreep(spawn, room, "harvester", [WORK, CARRY, MOVE], 0, 2, {
+//     memory: new HarvesterMemory(room)
+//   });
+// }
+
+/**
+ * Generate a new creep 'Colonist'.
+ * @param spawn Spawner who will spawn the new creep
+ * @param room Room where is the spawner
+ * @returns spawning statut
+ */
+function spawnColon(spawn: StructureSpawn, room: Room): number {
+  // FIXME : Body a rendre paramettrable
+  return spawnGenericCreep(spawn, room, "colonist", [WORK, CARRY, MOVE], 0, 2, {
+    memory: new ColonistMemory(room)
   });
 }
 
 /**
  * Generate a new creep with all of his information needed.
  *
- *  Can generate creep and limite the genegation of each role of creep.
+ * Can generate creep and limite the genegation of each role of creep.
  *
  * @param spawn Spawn who will do the job
  * @param room Room where is the spawn
@@ -111,8 +120,9 @@ function spawnGenericCreep(
   // How many creep already exist in this room with this role
   let existingCreeps = _.filter(
     Game.creeps,
-    (creep: Builder | Upgrader | Harvester | Claimer | Reservist | Repairman | Carrier | AssignedHarvester) =>
-      creep.memory.role == role && creep.memory.homeRoomName == room.name
+    (
+      creep: /*Builder | Upgrader | Harvester | Claimer | Reservist | Repairman | Carrier | AssignedHarvester*/ Colonist
+    ) => creep.memory.role == role && creep.memory.homeRoomName == room.name
   );
   if (existingCreeps.length < max) {
     // Generate a new creep
@@ -131,48 +141,54 @@ function spawnGenericCreep(
  * @param room Room where is the spawner
  * @returns spawining statut
  */
-function spawnCarrier(spawn: StructureSpawn, room: Room): number {
-  // Autorise an assigned Harvester only if a storage exist.
-  let result: number = -1;
-  if (spawn.room.storage) {
-    // for each sources memorise in the room
-    _.forEach(room.memory.structures, function (key, structureId) {
-      // get the source
-      let structure: Structure | undefined | null = Game.getObjectById(structureId.toString());
-      if (structure?.structureType == STRUCTURE_CONTAINER) {
-        if (structure) {
-          if (Game.time - (key.lastSpawn || 0) > CREEP_LIFE_TIME) {
-            var newName = "carrier" + Game.time;
+// function spawnCarrier(spawn: StructureSpawn, room: Room): number {
+//   // Autorise an assigned Harvester only if a storage exist.
+//   let result: number = -1;
+//   if (spawn.room.storage) {
+//     // for each sources memorise in the room
+//     _.forEach(room.memory.structures, function (key, structureId) {
+//       // get the source
+//       let structure: Structure | undefined | null = Game.getObjectById(structureId.toString());
+//       if (structure?.structureType == STRUCTURE_CONTAINER) {
+//         if (structure) {
+//           if (Game.time - (key.lastSpawn || 0) > CREEP_LIFE_TIME) {
+//             var newName = "carrier" + Game.time;
 
-            // On génère un creep
-            result = spawn.spawnCreep(getBody([CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], room, 4), newName, {
-              memory: new CarrierMemory(room, structure.id.toString(), room.storage!.id.toString(), key.roomName)
-            });
-            // If the result if the spawn is ok
-            if (result == OK) {
-              // Set the last time spawn and quit
-              key.lastSpawn = Game.time;
-              return false;
-            }
-          }
-        }
-      }
-      return true;
-    });
-  }
-  return result;
-}
+//             // On génère un creep
+//             // result = spawn.spawnCreep(getBody([CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], room, 4), newName, {
+//             //   memory: new CarrierMemory(room, structure.id.toString(), room.storage!.id.toString(), key.roomName)
+//             // });
+//             // If the result if the spawn is ok
+//             if (result == OK) {
+//               // Set the last time spawn and quit
+//               key.lastSpawn = Game.time;
+//               return false;
+//             }
+//           }
+//         }
+//       }
+//       return true;
+//     });
+//   }
+//   return result;
+// }
 
 const spawners = {
   /**
-   *
-   * @param room
+   * Execute the workflow of the spawner.
+   * A spawner generate all type of creep needed to the empire.
+   * Type of creep who the spawner can generate :
+   * - Harvester
+   * - Builder
+   * - Upgrader
+   * @param room Room who try to generate creep
    */
   run(room: Room) {
     let spawns: List<StructureSpawn> = <List<StructureSpawn>>room.find(FIND_MY_STRUCTURES, {
       filter: { structureType: STRUCTURE_SPAWN }
     });
 
+    // Extract all spawn available to be used
     spawns = _.filter(spawns, (s) => !s.spawning);
 
     // No spawn here,
@@ -184,9 +200,14 @@ const spawners = {
     let spawn: StructureSpawn = spawns[0];
 
     // Spawn a creep 'harvester'
-    if (spawnHarvester(spawn, room) == OK) {
+    if (spawnColon(spawn, room) == OK) {
       return;
     }
+
+    // Spawn a creep 'harvester'
+    // if (spawnHarvester(spawn, room) == OK) {
+    //   return;
+    // }
   }
 };
 

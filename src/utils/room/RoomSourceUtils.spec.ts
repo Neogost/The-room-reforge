@@ -2,6 +2,11 @@ import { mockInstanceOf, mockStructure, mockGlobal } from "screeps-jest";
 import { RoomSourceUtils } from "./RoomSourceUtils";
 import { NO_FULL_SCAN_DONE, NO_FULL_SCAN_DONE_LINKED } from "../ConstantUtils";
 
+const cpuMock = mockInstanceOf<CPU>({
+  getUsed: () => {
+    return 0;
+  }
+});
 describe("Room Source/Deposit/Mineral Utils, ", () => {
   describe("scan", () => {
     it("should scan, room with 1 source of energy, no problem during the scan", () => {
@@ -66,7 +71,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
           }
         },
 
-        rooms: { origineRoomWithOneSource: origineRoomWithOneSource }
+        rooms: { origineRoomWithOneSource: origineRoomWithOneSource },
+        cpu: cpuMock
       });
       let result: number = RoomSourceUtils.scan(origineRoomWithOneSource);
       expect(result).toBe(OK);
@@ -134,7 +140,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
           }
         },
 
-        rooms: { origineRoomWithOneSource: origineRoomWithOneSource }
+        rooms: { origineRoomWithOneSource: origineRoomWithOneSource },
+        cpu: cpuMock
       });
       let result: number = RoomSourceUtils.scan(origineRoomWithOneSource);
       expect(result).toBe(OK);
@@ -202,7 +209,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
           }
         },
 
-        rooms: { origineRoomWithOneSource: origineRoomWithOneSource }
+        rooms: { origineRoomWithOneSource: origineRoomWithOneSource },
+        cpu: cpuMock
       });
       let result: number = RoomSourceUtils.scan(origineRoomWithOneSource);
       expect(result).toBe(OK);
@@ -268,7 +276,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
           }
         },
 
-        rooms: { origineRoomWithOneSource: origineRoomWithOneSource }
+        rooms: { origineRoomWithOneSource: origineRoomWithOneSource },
+        cpu: cpuMock
       });
       let result: number = RoomSourceUtils.scan(origineRoomWithOneSource);
       expect(result).toBe(OK);
@@ -338,7 +347,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
             }
           },
 
-          rooms: {}
+          rooms: {},
+          cpu: cpuMock
         },
         true
       );
@@ -403,7 +413,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
             }
           },
 
-          rooms: { origineRoomWithOutSource: origineRoomWithOutSource }
+          rooms: { origineRoomWithOutSource: origineRoomWithOutSource },
+          cpu: cpuMock
         },
         true
       );
@@ -515,7 +526,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
         rooms: {
           origineRoomWithOneSourceAndOneLinkedRoom: origineRoomWithOneSourceAndOneLinkedRoom,
           linkedRoomToOriginRoom: linkedRoomToOriginRoom
-        }
+        },
+        cpu: cpuMock
       });
 
       let result: number = RoomSourceUtils.scan(origineRoomWithOneSourceAndOneLinkedRoom);
@@ -608,7 +620,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
 
           rooms: {
             origineRoomWithOneSourceAndOneLinkedRoom: origineRoomWithOneSourceAndOneLinkedRoom
-          }
+          },
+          cpu: cpuMock
         },
         true
       );

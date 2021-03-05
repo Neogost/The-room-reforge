@@ -1,9 +1,10 @@
 import ErrorMapper from "./utils/ErrorMapper";
 import { GameLoop } from "./gameLoop";
+import { Logger } from "./utils/Logger";
 
 var gameLoop: GameLoop;
-
 function unwrappedLoop() {
+  let startAnalyseCPU = Game.cpu.getUsed();
   console.log(`Current game tick is ${Game.time}`);
   if (gameLoop != null) {
     gameLoop.tick();
@@ -11,6 +12,8 @@ function unwrappedLoop() {
     console.log("Initialize game");
     gameLoop = new GameLoop();
   }
+  let endAnalyseCPU = Game.cpu.getUsed();
+  Logger.debug("Total CPU used : " + (endAnalyseCPU - startAnalyseCPU));
 }
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
