@@ -3,6 +3,11 @@ import { RoomSourceUtils } from "./RoomSourceUtils";
 import { NO_FULL_SCAN_DONE, NO_FULL_SCAN_DONE_LINKED } from "../ConstantUtils";
 import { RoomConstructionSiteUtils } from "./RoomConstructionSiteUtils";
 
+const cpuMock = mockInstanceOf<CPU>({
+  getUsed: () => {
+    return 0;
+  }
+});
 describe("Room Construction Site Utils, ", () => {
   describe("scan", () => {
     it("should scan, room with 1 constructions site, no problem during the scan", () => {
@@ -69,7 +74,8 @@ describe("Room Construction Site Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneConstructionSite: origineRoomWithOneConstructionSite }
+        rooms: { origineRoomWithOneConstructionSite: origineRoomWithOneConstructionSite },
+        cpu: cpuMock
       });
 
       let result: number = RoomConstructionSiteUtils.scan(origineRoomWithOneConstructionSite);
@@ -142,7 +148,8 @@ describe("Room Construction Site Utils, ", () => {
                 return null;
             }
           },
-          rooms: {}
+          rooms: {},
+          cpu: cpuMock
         },
         true
       );
@@ -213,7 +220,8 @@ describe("Room Construction Site Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneConstructionSite: origineRoomWithOneConstructionSite }
+        rooms: { origineRoomWithOneConstructionSite: origineRoomWithOneConstructionSite },
+        cpu: cpuMock
       });
 
       let result: number = RoomConstructionSiteUtils.scan(origineRoomWithOneConstructionSite);
@@ -286,7 +294,8 @@ describe("Room Construction Site Utils, ", () => {
                 return null;
             }
           },
-          rooms: {}
+          rooms: {},
+          cpu: cpuMock
         },
         true
       );
@@ -370,7 +379,8 @@ describe("Room Construction Site Utils, ", () => {
               return null;
           }
         },
-        rooms: { origineRoomWithOneConstructionSite: origineRoomWithOneConstructionSite }
+        rooms: { origineRoomWithOneConstructionSite: origineRoomWithOneConstructionSite },
+        cpu: cpuMock
       });
 
       let result: number = RoomConstructionSiteUtils.scan(origineRoomWithOneConstructionSite);
@@ -470,7 +480,8 @@ describe("Room Construction Site Utils, ", () => {
         rooms: {
           origineRoomWithOneConstructionSite: origineRoomWithOneConstructionSite,
           linkedRoomWithOneConstructionSite: linkedRoomWithOneConstructionSite
-        }
+        },
+        cpu: cpuMock
       });
 
       let result: number = RoomConstructionSiteUtils.scan(origineRoomWithOneConstructionSite);
@@ -571,7 +582,8 @@ describe("Room Construction Site Utils, ", () => {
           },
           rooms: {
             origineRoomWithOneConstructionSite: origineRoomWithOneConstructionSite
-          }
+          },
+          cpu: cpuMock
         },
         true
       );

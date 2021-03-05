@@ -60,7 +60,7 @@ export class RoomSourceUtils {
       }
     });
     let AnalyseCPUEnd = Game.cpu.getUsed();
-    Logger.debug(scannedRoom.name + "Scan Structure : " + (AnalyseCPUEnd - AnalyseCPUStart));
+    Logger.debug(scannedRoom.name + "Scan Source execution use : " + (AnalyseCPUEnd - AnalyseCPUStart));
     return statut;
   }
 

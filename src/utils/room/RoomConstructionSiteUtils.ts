@@ -20,6 +20,7 @@ export class RoomConstructionSiteUtils {
    */
   public static scan(scannedRoom: Room): number {
     Logger.info("Scan Constructions site room : " + scannedRoom.name);
+    let AnalyseCPUStart = Game.cpu.getUsed();
     let statut: number = OK;
 
     // Control existance of the structure
@@ -48,6 +49,8 @@ export class RoomConstructionSiteUtils {
         Logger.warning(scannedRoom.name + " : Cannot scan linked room : " + linkedRoomName);
       }
     });
+    let AnalyseCPUEnd = Game.cpu.getUsed();
+    Logger.debug(scannedRoom.name + "Scan Construction Site execution use : " + (AnalyseCPUEnd - AnalyseCPUStart));
     return statut;
   }
 
