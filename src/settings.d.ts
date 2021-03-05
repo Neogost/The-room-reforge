@@ -99,6 +99,8 @@ interface SourcesOptions {
   roomName: string;
   /** Type of the source : SOURCE/MINERAL/DEPOSIT */
   type: string;
+  /** Position of the sources */
+  pos: RoomPosition;
 }
 
 /**

@@ -1,13 +1,13 @@
 import { List } from "lodash";
 
 RoomPosition.prototype.getNearByPositions = function getNearByPositions(): Array<RoomPosition> {
-  var positions = [];
+  let positions = [];
 
   let startX = this.x - 1 || 1;
   let startY = this.y - 1 || 1;
 
-  for (var x: number = startX; x <= this.x + 1 && x < 49; x++) {
-    for (var y: number = startY; y <= this.y + 1 && y < 49; y++) {
+  for (let x: number = startX; x <= this.x + 1 && x < 49; x++) {
+    for (let y: number = startY; y <= this.y + 1 && y < 49; y++) {
       if (x !== this.x || y !== this.y) {
         positions.push(new RoomPosition(x, y, this.roomName));
       }

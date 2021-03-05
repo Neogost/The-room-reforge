@@ -21,6 +21,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
         id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSource",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource"),
         lastSpawn: undefined
       });
       const origineSourceMemory = mockInstanceOf<SourceMemoryMap<SourcesOptions>>(
@@ -58,7 +59,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
 
       const source1 = mockInstanceOf<Source>({
         id: "source1" as Id<Source>,
-        room: origineRoomWithOneSource
+        room: origineRoomWithOneSource,
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource")
       });
 
       mockGlobal<Game>("Game", {
@@ -90,6 +92,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
         id: "deposit1" as Id<Deposit>,
         roomName: "origineRoomWithOneSource",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource"),
         lastSpawn: undefined
       });
       const origineSourceMemory = mockInstanceOf<SourceMemoryMap<SourcesOptions>>(
@@ -127,7 +130,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
 
       const deposit1 = mockInstanceOf<Deposit>({
         id: "deposit1" as Id<Deposit>,
-        room: origineRoomWithOneSource
+        room: origineRoomWithOneSource,
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource")
       });
 
       mockGlobal<Game>("Game", {
@@ -159,6 +163,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
         id: "mineral1" as Id<Mineral>,
         roomName: "origineRoomWithOneSource",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource"),
         lastSpawn: undefined
       });
       const origineSourceMemory = mockInstanceOf<SourceMemoryMap<SourcesOptions>>(
@@ -196,7 +201,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
 
       const mineral1 = mockInstanceOf<Mineral>({
         id: "mineral1" as Id<Mineral>,
-        room: origineRoomWithOneSource
+        room: origineRoomWithOneSource,
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource")
       });
 
       mockGlobal<Game>("Game", {
@@ -225,11 +231,6 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
         }
       }));
 
-      const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "source1" as Id<Source>,
-        roomName: "origineRoomWithOneSource",
-        lastSpawn: undefined
-      });
       const origineSourceMemory = mockInstanceOf<SourceMemoryMap<SourcesOptions>>({}, true);
 
       const origineLinkedMemory = mockInstanceOf<LinkedMemoryMap<LinkedRoomOptions>>({}, true);
@@ -263,7 +264,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
 
       const source1 = mockInstanceOf<Source>({
         id: "source1" as Id<Source>,
-        room: origineRoomWithOneSource
+        room: origineRoomWithOneSource,
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource")
       });
 
       mockGlobal<Game>("Game", {
@@ -295,6 +297,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
         id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSource",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource"),
         lastSpawn: undefined
       });
       const origineSourceMemory = mockInstanceOf<SourceMemoryMap<SourcesOptions>>(
@@ -332,7 +335,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
 
       const source1 = mockInstanceOf<Source>({
         id: "source1" as Id<Source>,
-        room: origineRoomWithOneSource
+        room: origineRoomWithOneSource,
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSource")
       });
 
       mockGlobal<Game>(
@@ -368,6 +372,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
         id: "source1" as Id<Source>,
         roomName: "origineRoomWithOutSource",
+        pos: new RoomPosition(0, 0, "origineRoomWithOutSource"),
         lastSpawn: undefined
       });
       const origineSourceMemory = mockInstanceOf<SourceMemoryMap<SourcesOptions>>(
@@ -434,12 +439,14 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
         id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSourceAndOneLinkedRoom",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSourceAndOneLinkedRoom"),
         lastSpawn: undefined
       });
 
       const sourceLinkedOption1 = mockInstanceOf<SourcesOptions>({
         id: "sourceLinked1" as Id<Source>,
         roomName: "origineRoomWithOneSourceAndOneLinkedRoom",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSourceAndOneLinkedRoom"),
         lastSpawn: undefined
       });
       const origineSourceMemory = mockInstanceOf<SourceMemoryMap<SourcesOptions>>(
@@ -510,7 +517,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       );
       const source1 = mockInstanceOf<Source>({
         id: "source1" as Id<Source>,
-        room: origineRoomWithOneSourceAndOneLinkedRoom
+        room: origineRoomWithOneSourceAndOneLinkedRoom,
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSourceAndOneLinkedRoom")
       });
 
       mockGlobal<Game>("Game", {
@@ -546,12 +554,14 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
         id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSourceAndOneLinkedRoom",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSourceAndOneLinkedRoom"),
         lastSpawn: undefined
       });
 
       const sourceLinkedOption1 = mockInstanceOf<SourcesOptions>({
         id: "sourceLinked1" as Id<Source>,
         roomName: "origineRoomWithOneSourceAndOneLinkedRoom",
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSourceAndOneLinkedRoom"),
         lastSpawn: undefined
       });
       const origineSourceMemory = mockInstanceOf<SourceMemoryMap<SourcesOptions>>(
@@ -603,7 +613,8 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       );
       const source1 = mockInstanceOf<Source>({
         id: "source1" as Id<Source>,
-        room: origineRoomWithOneSourceAndOneLinkedRoom
+        room: origineRoomWithOneSourceAndOneLinkedRoom,
+        pos: new RoomPosition(0, 0, "origineRoomWithOneSourceAndOneLinkedRoom")
       });
 
       mockGlobal<Game>(

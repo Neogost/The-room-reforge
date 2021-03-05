@@ -31,6 +31,10 @@ export const NO_FULL_SCAN_DONE = -1004;
 export const NO_FULL_SCAN_DONE_LINKED = -1008;
 export const NEED_A_SCAN = 5000;
 
+// Type of Resources :
+export const SOURCE_SOURCE_OPTION = "source";
+export const MINERAL_SOURCE_OPTION = "mineral";
+export const DEPOSIT_SOURCE_OPTION = "deposit";
 // Traveler
 export const TRAVELER_MOVE = 1000;
 // Divers, a voir si je dois le conserver

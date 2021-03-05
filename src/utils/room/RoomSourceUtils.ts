@@ -1,5 +1,11 @@
 import { Logger } from "../Logger";
-import { NO_FULL_SCAN_DONE, NO_FULL_SCAN_DONE_LINKED } from "../ConstantUtils";
+import {
+  DEPOSIT_SOURCE_OPTION,
+  MINERAL_SOURCE_OPTION,
+  NO_FULL_SCAN_DONE,
+  NO_FULL_SCAN_DONE_LINKED,
+  SOURCE_SOURCE_OPTION
+} from "../ConstantUtils";
 import { List } from "lodash";
 
 /**
@@ -106,7 +112,8 @@ export class RoomSourceUtils {
       _.set(scannedRoom.memory, ["sources", source.id], {
         id: source.id,
         roomName: source.room!.name,
-        type: type
+        type: type,
+        pos: source.pos
       } as SourcesOptions);
     }
     // Update source
@@ -118,6 +125,7 @@ export class RoomSourceUtils {
         id: source.id,
         roomName: source.room!.name,
         type: type,
+        pos: source.pos,
         lastSpawn: lastSpawn
       } as SourcesOptions);
     }
@@ -138,17 +146,17 @@ export class RoomSourceUtils {
   ) {
     if (minerals) {
       _.forEach(minerals, (mineral) => {
-        this.saveOrUpdate(scannedRoom, mineral, "mineral");
+        this.saveOrUpdate(scannedRoom, mineral, MINERAL_SOURCE_OPTION);
       });
     }
     if (sources) {
       _.forEach(sources, (source) => {
-        this.saveOrUpdate(scannedRoom, source, "source");
+        this.saveOrUpdate(scannedRoom, source, SOURCE_SOURCE_OPTION);
       });
     }
     if (deposits) {
       _.forEach(deposits, (deposit) => {
-        this.saveOrUpdate(scannedRoom, deposit, "deposit");
+        this.saveOrUpdate(scannedRoom, deposit, DEPOSIT_SOURCE_OPTION);
       });
     }
   }
