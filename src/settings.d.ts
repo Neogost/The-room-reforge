@@ -13,8 +13,16 @@ interface Settings {
   enemies?: Array<string>;
   /** Indicator for repairman */
   repairIndicator: number;
+  /** Indication to the conquest of room, list properties to use */
+  colonisation: Colonisation;
 }
 
+/**
+ * List all properties needed to do a good conquest.
+ */
+interface Colonisation {
+  levelToMaintain: number;
+}
 interface LinkedRoomOptions {}
 
 interface ScoutOptions {}
@@ -67,6 +75,10 @@ interface ConstructionSiteOptions {
   owner: string;
   /** The structure Type*/
   type: StructureConstant;
+  /** Progression of the construction */
+  progress: number;
+  /** Total effort needed to finish the construction */
+  progressTotal: number;
 }
 
 /**
