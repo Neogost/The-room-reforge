@@ -32,7 +32,7 @@ describe("Room Structure Utils, ", () => {
       }));
 
       const structureOption1 = mockInstanceOf<StructureOptions>({
-        id: "structure1",
+        id: "structure1" as Id<Structure>,
         roomName: "origineRoomWithOneStructure",
         type: "container",
         lastSpawn: undefined
@@ -97,7 +97,7 @@ describe("Room Structure Utils, ", () => {
       }));
 
       const structureOption1 = mockInstanceOf<StructureOptions>({
-        id: "structure1",
+        id: "structure1" as Id<Structure>,
         roomName: "origineRoomWithOneStructure",
         type: "container",
         lastSpawn: undefined
@@ -162,7 +162,7 @@ describe("Room Structure Utils, ", () => {
       }));
 
       const structureOption1 = mockInstanceOf<StructureOptions>({
-        id: "structure1",
+        id: "structure1" as Id<Structure>,
         roomName: "origineRoomWithOneStructure",
         type: "container",
         lastSpawn: undefined
@@ -219,7 +219,7 @@ describe("Room Structure Utils, ", () => {
       }));
 
       const structureOption1 = mockInstanceOf<StructureOptions>({
-        id: "structure1",
+        id: "structure1" as Id<Structure>,
         roomName: "origineRoomWithOneStructure",
         type: "container",
         lastSpawn: undefined
@@ -284,7 +284,7 @@ describe("Room Structure Utils, ", () => {
       const linkedOption1 = mockInstanceOf<LinkOptions>({});
 
       const structureOption1 = mockInstanceOf<StructureOptions>({
-        id: "structure1",
+        id: "structure1" as Id<Structure>,
         roomName: "linkedRoomWithOneStructure",
         type: "container",
         lastSpawn: undefined
@@ -378,7 +378,7 @@ describe("Room Structure Utils, ", () => {
       const linkedOption1 = mockInstanceOf<LinkOptions>({});
 
       const structureOption1 = mockInstanceOf<StructureOptions>({
-        id: "structure1",
+        id: "structure1" as Id<Structure>,
         roomName: "linkedRoomWithOneStructure",
         type: "container",
         lastSpawn: undefined

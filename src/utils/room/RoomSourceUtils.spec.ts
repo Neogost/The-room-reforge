@@ -19,7 +19,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       }));
 
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "source1",
+        id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSource",
         lastSpawn: undefined
       });
@@ -88,7 +88,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       }));
 
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "deposit1",
+        id: "deposit1" as Id<Deposit>,
         roomName: "origineRoomWithOneSource",
         lastSpawn: undefined
       });
@@ -157,7 +157,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       }));
 
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "mineral1",
+        id: "mineral1" as Id<Mineral>,
         roomName: "origineRoomWithOneSource",
         lastSpawn: undefined
       });
@@ -226,7 +226,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       }));
 
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "source1",
+        id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSource",
         lastSpawn: undefined
       });
@@ -293,7 +293,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       }));
 
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "source1",
+        id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSource",
         lastSpawn: undefined
       });
@@ -366,7 +366,7 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       }));
 
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "source1",
+        id: "source1" as Id<Source>,
         roomName: "origineRoomWithOutSource",
         lastSpawn: undefined
       });
@@ -432,13 +432,13 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       }));
 
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "source1",
+        id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSourceAndOneLinkedRoom",
         lastSpawn: undefined
       });
 
       const sourceLinkedOption1 = mockInstanceOf<SourcesOptions>({
-        id: "sourceLinked1",
+        id: "sourceLinked1" as Id<Source>,
         roomName: "origineRoomWithOneSourceAndOneLinkedRoom",
         lastSpawn: undefined
       });
@@ -544,13 +544,13 @@ describe("Room Source/Deposit/Mineral Utils, ", () => {
       }));
 
       const sourceOption1 = mockInstanceOf<SourcesOptions>({
-        id: "source1",
+        id: "source1" as Id<Source>,
         roomName: "origineRoomWithOneSourceAndOneLinkedRoom",
         lastSpawn: undefined
       });
 
       const sourceLinkedOption1 = mockInstanceOf<SourcesOptions>({
-        id: "sourceLinked1",
+        id: "sourceLinked1" as Id<Source>,
         roomName: "origineRoomWithOneSourceAndOneLinkedRoom",
         lastSpawn: undefined
       });
