@@ -1,5 +1,32 @@
 import { List } from "lodash";
 import { Colonist, ColonistMemory } from "../roles/colony/colonist";
+import { BuilderMemory, Builder } from "../roles/colony/builider";
+import {
+  ERR_NOTHING_TO_DO,
+  SOURCE_TYPE,
+  HARVESTER_DEDICATED_BODY,
+  CREEP_CARRIER,
+  CARRIER_DEDICATED_BODY,
+  CREEP_HARVESTER,
+  HARVESTER_MINIMAL_BODY,
+  SECOND_LEVEL_STORAGE_STOCK,
+  DEFAULT_BODY,
+  CREEP_COLONIST,
+  SCOUT_BODY,
+  UPGRADER_DEDICATED_BODY,
+  UPGRADER_MINIMAL_BODY,
+  HARVESTER_MINIMAL_LIMIT,
+  CARRIER_DEDICATED_LIMIT,
+  CREEP_CARRIER_DEFAULT_NUMBER,
+  CREEP_HARVESTER_DEFAULT_NUMBER,
+  CREEP_COLONIST_DEFAULT_NUMBER,
+  CREEP_SCOUT_DEFAULT_NUMBER,
+  CREEP_REPAIRMANS_DEFAULT_NUMBER,
+  CREEP_MANAGER_DEFAULT_NUMBER,
+  CREEP_BUILDER_DEFAULT_NUMBER,
+  CREEP_UPGRADER_DEFAULT_NUMBER,
+  HARVESTER_DEDICATED_LIMIT
+} from "../utils/ConstantUtils";
 
 import {
   ERR_NO_SPAWN_SELECTED,
@@ -7,9 +34,25 @@ import {
   ERR_NO_ROOM_SELECTED,
   ERR_FULL_CREEP
 } from "../utils/ConstantUtils";
-
+import { UpgraderMemory, Upgrader } from "../roles/colony/upgrader";
+import { Harvester, HarvesterMemory } from "../roles/colony/harvester";
+import { Logger } from "../utils/Logger";
+import { ScoutMemory, Scout } from "../roles/army/scout";
+import { RepairmanMemory, Repairman } from "../roles/colony/repairman";
+import { CarrierMemory } from "../roles/colony/carrier";
+import { ManagerMemory, Manager } from "../roles/colony/manager";
+import { MANAGER_LIMIT, DEFAULT_LIMIT } from "../utils/ConstantUtils";
+import { SCOUT_LIMIT, UPGRADER_DEDICATED_LIMIT, UPGRADER_MINIMAL_LIMIT } from "../utils/ConstantUtils";
+import {
+  CREEP_MANAGER,
+  CREEP_REPAIRMANS,
+  CREEP_SCOUT,
+  CREEP_BUILDER,
+  CREEP_UPGRADER,
+  MANAGER_BODY
+} from "../utils/ConstantUtils";
 /**
- * Get the body of a new creep base on a `segment` and energy available in the `room` who will produce it.
+ * @description Get the body of a new creep base on a `segment` and energy available in the `room` who will produce it.
  *
  * Segment is element like constant:
  * - MOVE
@@ -25,8 +68,10 @@ import {
  * @param room room who are ready to spawn a creep.
  * @param limitedBody limit the body size
  * @returns The final size of the body, if no segment is given : null
+ * @version 1.0
  */
 function getBody(segment: List<BodyPartConstant>, room: Room, limitedBody?: number): Array<BodyPartConstant> {
+  let analyseCPUStart = Game.cpu.getUsed();
   let body: Array<BodyPartConstant> = new Array();
 
   // do the sum of body part pattern
@@ -47,37 +92,345 @@ function getBody(segment: List<BodyPartConstant>, room: Room, limitedBody?: numb
     _.forEach(segment, (s) => body.push(s));
   });
 
+  let analyseCPUEnd = Game.cpu.getUsed();
+  Logger.debug("get Body execution use : " + (analyseCPUEnd - analyseCPUStart));
   return body;
 }
 
 /**
- * Generate a new creep 'Harvester'
- * @param spawn Spawner who will spawn the new creep
- * @param room Room where is the spawner
- * @returns spawning statut
+ * @description Determinate the body size and part of a futur Creep.
+ * @param room room where the creep will be spawn
+ * @param role Role of the creep. Help to determinate the body pattern. If incorrect, return default pattern
+ * @param link If exist, used to initialised some body
+ * @returns Array of body part for the creep
+ * @version 1.0
  */
-// function spawnHarvester(spawn: StructureSpawn, room: Room): number {
-//   // FIXME : Body a rendre paramettrable
-//   return spawnGenericCreep(spawn, room, "harvester", [WORK, CARRY, MOVE], 0, 2, {
-//     memory: new HarvesterMemory(room)
-//   });
-// }
+function getBodyPattern(room: Room, role: string, link?: StructureLink): Array<BodyPartConstant> {
+  switch (role) {
+    // ===== COLONY
+    case CREEP_HARVESTER:
+      if (room.storage && room.storage.store[RESOURCE_ENERGY] > SECOND_LEVEL_STORAGE_STOCK) {
+        return HARVESTER_DEDICATED_BODY;
+      } else {
+        // Pattern use for low level or insuffisent energy
+        return HARVESTER_MINIMAL_BODY;
+      }
+    case CREEP_UPGRADER:
+      if (link) {
+        return UPGRADER_DEDICATED_BODY;
+      } else {
+        return UPGRADER_MINIMAL_BODY;
+      }
+    case CREEP_BUILDER:
+      return DEFAULT_BODY;
+    case CREEP_REPAIRMANS:
+      return DEFAULT_BODY;
+    case CREEP_MANAGER:
+      return MANAGER_BODY;
+    case CREEP_CARRIER:
+      return CARRIER_DEDICATED_BODY;
+    case CREEP_COLONIST:
+      return DEFAULT_BODY;
 
+    // ===== ARMY
+    case CREEP_SCOUT:
+      return SCOUT_BODY;
+    // ===== DEFAULT
+    default:
+      return DEFAULT_BODY;
+  }
+}
 /**
- * Generate a new creep 'Colonist'.
- * @param spawn Spawner who will spawn the new creep
- * @param room Room where is the spawner
- * @returns spawning statut
+ * @description Determinate the body limit of an futur Creep.
+ * @param room room where the creep will be spawn
+ * @param role Role of the creep. Help to determinate the body pattern. If incorrect, return default pattern
+ * @param link If exist, used to initialised some body
+ * @returns Array of body part for the creep
+ * @version 1.0
  */
-function spawnColon(spawn: StructureSpawn, room: Room): number {
-  // FIXME : Body a rendre paramettrable
-  return spawnGenericCreep(spawn, room, "colonist", [WORK, CARRY, MOVE], 0, 2, {
-    memory: new ColonistMemory(room)
-  });
+function getBodyLimit(room: Room, role: string, link?: StructureLink): number {
+  switch (role) {
+    // ===== COLONY
+    case CREEP_HARVESTER:
+      if (room.storage && room.storage.store[RESOURCE_ENERGY] > SECOND_LEVEL_STORAGE_STOCK) {
+        return HARVESTER_DEDICATED_LIMIT;
+      } else {
+        // Pattern use for low level or insuffisent energy
+        return HARVESTER_MINIMAL_LIMIT;
+      }
+    case CREEP_UPGRADER:
+      if (link) {
+        return UPGRADER_DEDICATED_LIMIT;
+      } else {
+        return UPGRADER_MINIMAL_LIMIT;
+      }
+    case CREEP_BUILDER:
+      return DEFAULT_LIMIT;
+    case CREEP_REPAIRMANS:
+      return DEFAULT_LIMIT;
+    case CREEP_MANAGER:
+      return MANAGER_LIMIT;
+    case CREEP_CARRIER:
+      return CARRIER_DEDICATED_LIMIT;
+    case CREEP_COLONIST:
+      return DEFAULT_LIMIT;
+
+    // ===== ARMY
+    case CREEP_SCOUT:
+      return SCOUT_LIMIT;
+
+    // ===== DEFAULT
+    default:
+      return DEFAULT_LIMIT;
+  }
 }
 
 /**
- * Generate a new creep with all of his information needed.
+ * @description Try to spawn a creep of type `Carrier`.
+ * A `Carrier` is generated if there are a container available. A container available is a container who are in a room or this linked room who haven't be linked to an other carrier
+ *
+ * @param spawn spawn try to do the action of spawn a `Carrier`
+ * @param room Room where the spawn and the creep is. Use to initialise the `Carrier`
+ * @returns Statut of execution of the spawn. See [StructureSpawner.spawnCreep()](https://docs.screeps.com/api/#StructureSpawn.spawnCreep) documentation.
+ * @version 1.0
+ */
+function spawnCarrier(spawn: StructureSpawn, room: Room): number {
+  let storage = room.storage;
+  let result = -1;
+  // Find container in the room's structure memory
+  let containers = _.filter(room.memory.structures, function (s) {
+    return s.type === STRUCTURE_CONTAINER;
+  });
+
+  // For each container
+  _.forEach(containers, function (container) {
+    // Check if it was already affected and it's not the time to spawn another creep for this container
+    if (Game.time - (container.lastSpawn || 0) > CREEP_LIFE_TIME) {
+      let containerStatut: StructureContainer = <StructureContainer>Game.getObjectById(container.id);
+      // Check if the container is not empty, if it is empty, the container is may be not used
+      if (containerStatut.store[RESOURCE_ENERGY] > 200) {
+        // Spawn a Carrier
+        result = spawnGenericCreep(
+          spawn,
+          room,
+          CREEP_CARRIER,
+          getBodyPattern(room, CREEP_CARRIER),
+          getBodyLimit(room, CREEP_CARRIER),
+          CREEP_CARRIER_DEFAULT_NUMBER,
+          {
+            memory: new CarrierMemory(
+              room,
+              container.id as Id<StructureContainer>,
+              container.pos,
+              container.roomName,
+              storage
+            )
+          }
+        );
+      }
+      // The carrier is spawned, no need to continue the forEach
+      if (result == OK) {
+        // Set the time code when the Carrier was spawn on the container, in memory
+        container.lastSpawn = Game.time;
+        return false;
+      }
+    }
+    // Continue to try to spawn a Carrier
+    return true;
+  });
+  return result;
+}
+/**
+ * @description Try to spawn a creep of type `Harvester`.
+ * A `Harvester` is generated if there are a `source` available in the room or a linked room. It's determinate if the source have been already affected.
+ *
+ * @param spawn spawn try to do the action of spawn a `Harvester`
+ * @param room Room where the spawn and the creep is. Use to initialise the `Harvester`
+ * @returns Statut of execution of the spawn. See [StructureSpawner.spawnCreep()](https://docs.screeps.com/api/#StructureSpawn.spawnCreep) documentation.
+ */
+function spawnHarvester(spawn: StructureSpawn, room: Room): number {
+  let storage = room.storage;
+  let result = -1;
+  // For each source, assign a creep
+  _.forEach(room.memory.sources, function (source) {
+    // Take only `Source`
+    if (source.type === SOURCE_TYPE) {
+      // Check if it was already affected and it's not the time to spawn another creep for this source
+      if (Game.time - (source.lastSpawn || 0) > CREEP_LIFE_TIME) {
+        result = spawnGenericCreep(
+          spawn,
+          room,
+          CREEP_HARVESTER,
+          getBodyPattern(room, CREEP_HARVESTER),
+          getBodyLimit(room, CREEP_HARVESTER),
+          CREEP_HARVESTER_DEFAULT_NUMBER,
+          {
+            memory: new HarvesterMemory(room, source.id as Id<Source>, source.pos, source.roomName, storage)
+          }
+        );
+        // The harvester is spawned, no need to continue the forEach
+        if (result == OK) {
+          // Set the time code when the Harvester was spawn on the source, in memory
+          source.lastSpawn = Game.time;
+          return false;
+        }
+      }
+    }
+    // Continue to try to spawn a Harvester
+    return true;
+  });
+  return result;
+}
+
+/**
+ * @description Try to spawn a creep of type `Colonist`.
+ * @param spawn spawn try to do the action of spawn a `Colonist`
+ * @param room Room where the spawn and the creep is. Use to initialise the `Colonist`
+ * @returns spawning statut
+ * @version 1.0
+ */
+function spawnColonist(spawn: StructureSpawn, room: Room): number {
+  let result = spawnGenericCreep(
+    spawn,
+    room,
+    CREEP_COLONIST,
+    getBodyPattern(room, CREEP_COLONIST),
+    getBodyLimit(room, CREEP_COLONIST),
+    CREEP_COLONIST_DEFAULT_NUMBER,
+    {
+      memory: new ColonistMemory(room)
+    }
+  );
+  return result;
+}
+/**
+ * @description Try to spawn a creep of type `Scout`.
+ * @param spawn spawn try to do the action of spawn a `Scout`
+ * @param room Room where the spawn and the creep is. Use to initialise the `Scout`
+ * @returns spawning statut
+ * @version 1.0
+ */
+function spawnScout(spawn: StructureSpawn, room: Room): number {
+  let result = spawnGenericCreep(
+    spawn,
+    room,
+    CREEP_SCOUT,
+    getBodyPattern(room, CREEP_SCOUT),
+    getBodyLimit(room, CREEP_SCOUT),
+    CREEP_SCOUT_DEFAULT_NUMBER,
+    {
+      memory: new ScoutMemory(room)
+    }
+  );
+  return result;
+}
+
+/**
+ * Generate a new creep 'Repairmans'.
+ * @param spawn spawn try to do the action of spawn a `Repairmans`
+ * @param room Room where the spawn and the creep is. Use to initialise the `Repairmans`
+ * @returns spawning statut
+ * @version 1.0
+ */
+function spawnRepairman(spawn: StructureSpawn, room: Room): number {
+  let result = spawnGenericCreep(
+    spawn,
+    room,
+    CREEP_REPAIRMANS,
+    getBodyPattern(room, CREEP_REPAIRMANS),
+    getBodyLimit(room, CREEP_REPAIRMANS),
+    CREEP_REPAIRMANS_DEFAULT_NUMBER,
+    {
+      memory: new RepairmanMemory(room, room.storage)
+    }
+  );
+  return result;
+}
+/**
+ * Generate a new creep 'Manager'.
+ * @param spawn spawn try to do the action of spawn a `Manager`
+ * @param room Room where the spawn and the creep is. Use to initialise the `Manager`
+ * @returns spawning statut
+ * @version 1.0
+ */
+function spawnManager(spawn: StructureSpawn, room: Room): number {
+  let result = -1;
+  // FIXME : Body a rendre paramettrable
+  if (room.storage && room.storage.store[RESOURCE_ENERGY] > SECOND_LEVEL_STORAGE_STOCK) {
+    result = spawnGenericCreep(
+      spawn,
+      room,
+      CREEP_MANAGER,
+      getBodyPattern(room, CREEP_MANAGER),
+      getBodyLimit(room, CREEP_MANAGER),
+      CREEP_MANAGER_DEFAULT_NUMBER,
+      {
+        memory: new ManagerMemory(room, room.storage)
+      }
+    );
+  }
+  return result;
+}
+
+/**
+ * Generate a new creep 'Builder'.
+ * @param spawn spawn try to do the action of spawn a `Builder`
+ * @param room Room where the spawn and the creep is. Use to initialise the `Builder`
+ * @returns spawning statut
+ * @version 1.0
+ */
+function spawnBuilder(spawn: StructureSpawn, room: Room): number {
+  let result = -1;
+  // If there are nothing to build, do nothing
+  if (Object.keys(room.memory.constructionsSites).length === 0) {
+    return ERR_NOTHING_TO_DO;
+  }
+  // FIXME : Body a rendre paramettrable
+  result = spawnGenericCreep(
+    spawn,
+    room,
+    CREEP_BUILDER,
+    getBodyPattern(room, CREEP_BUILDER),
+    getBodyLimit(room, CREEP_BUILDER),
+    CREEP_BUILDER_DEFAULT_NUMBER,
+    {
+      memory: new BuilderMemory(room, room.storage)
+    }
+  );
+  return result;
+}
+/**
+ * Generate a new creep 'Upgrader'.
+ * @param spawn spawn try to do the action of spawn a `Upgrader`
+ * @param room Room where the spawn and the creep is. Use to initialise the `Upgrader`
+ * @returns spawning statut
+ * @version 1.0
+ */
+function spawnUpgrader(spawn: StructureSpawn, room: Room): number {
+  let result = -1;
+  let link: StructureLink | undefined;
+  let structureLinksDestination = _.filter(room.memory.structures, function (structure) {
+    return structure.linkOrigine === false;
+  });
+  if (structureLinksDestination.length > 0) {
+    link = <StructureLink>Game.getObjectById(structureLinksDestination[0].id);
+  }
+  result = spawnGenericCreep(
+    spawn,
+    room,
+    CREEP_UPGRADER,
+    getBodyPattern(room, CREEP_UPGRADER, link),
+    getBodyLimit(room, CREEP_UPGRADER, link),
+    CREEP_UPGRADER_DEFAULT_NUMBER,
+    {
+      memory: new UpgraderMemory(room, room.storage, link)
+    }
+  );
+  return result;
+}
+
+/**
+ * @description Generate a new creep with all of his information needed.
  *
  * Can generate creep and limite the genegation of each role of creep.
  *
@@ -93,6 +446,7 @@ function spawnColon(spawn: StructureSpawn, room: Room): number {
  * - ERR_NO_ROLE_FOR_CREEP : No role are set for the new creep, can't initialise creep memory
  * - ERR_NO_ROOM_SELECTED : No room are selected for the spawning, can't initialise creep memory
  * - ERR_FULL_CREEP : The room is full of this role
+ * @version 1.0
  */
 function spawnGenericCreep(
   spawn: StructureSpawn,
@@ -116,13 +470,13 @@ function spawnGenericCreep(
     return ERR_NO_ROOM_SELECTED;
   }
   // How many creep with this role is autorise in this room
-  let max = _.get(room.memory, ["consus", role], defaultConsus);
+  // FIXME : Cette appel, lors de sa première exécution prend 0,9 CPU... (cas du Colonist
+  let max = _.get(room.memory.consus, role, defaultConsus);
   // How many creep already exist in this room with this role
   let existingCreeps = _.filter(
     Game.creeps,
-    (
-      creep: /*Builder | Upgrader | Harvester | Claimer | Reservist | Repairman | Carrier | AssignedHarvester*/ Colonist
-    ) => creep.memory.role == role && creep.memory.homeRoomName == room.name
+    (creep: Harvester | Upgrader | Colonist | Builder | Scout | Repairman | Manager) =>
+      creep.memory.role == role && creep.memory.homeRoomName == room.name
   );
   if (existingCreeps.length < max) {
     // Generate a new creep
@@ -135,44 +489,6 @@ function spawnGenericCreep(
   }
 }
 
-/**
- * Generate a new creep 'AssignedHarvest'
- * @param spawn Spawner who will spawn the new creep
- * @param room Room where is the spawner
- * @returns spawining statut
- */
-// function spawnCarrier(spawn: StructureSpawn, room: Room): number {
-//   // Autorise an assigned Harvester only if a storage exist.
-//   let result: number = -1;
-//   if (spawn.room.storage) {
-//     // for each sources memorise in the room
-//     _.forEach(room.memory.structures, function (key, structureId) {
-//       // get the source
-//       let structure: Structure | undefined | null = Game.getObjectById(structureId.toString());
-//       if (structure?.structureType == STRUCTURE_CONTAINER) {
-//         if (structure) {
-//           if (Game.time - (key.lastSpawn || 0) > CREEP_LIFE_TIME) {
-//             var newName = "carrier" + Game.time;
-
-//             // On génère un creep
-//             // result = spawn.spawnCreep(getBody([CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], room, 4), newName, {
-//             //   memory: new CarrierMemory(room, structure.id.toString(), room.storage!.id.toString(), key.roomName)
-//             // });
-//             // If the result if the spawn is ok
-//             if (result == OK) {
-//               // Set the last time spawn and quit
-//               key.lastSpawn = Game.time;
-//               return false;
-//             }
-//           }
-//         }
-//       }
-//       return true;
-//     });
-//   }
-//   return result;
-// }
-
 const spawners = {
   /**
    * Execute the workflow of the spawner.
@@ -184,6 +500,7 @@ const spawners = {
    * @param room Room who try to generate creep
    */
   run(room: Room) {
+    let analyseCPUStart = Game.cpu.getUsed();
     let spawns: List<StructureSpawn> = <List<StructureSpawn>>room.find(FIND_MY_STRUCTURES, {
       filter: { structureType: STRUCTURE_SPAWN }
     });
@@ -193,21 +510,65 @@ const spawners = {
 
     // No spawn here,
     if (!spawns.length) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
       return;
     }
 
     // Use the first spawn available
     let spawn: StructureSpawn = spawns[0];
 
-    // Spawn a creep 'harvester'
-    if (spawnColon(spawn, room) == OK) {
+    // Spawn a creep 'colonist'
+    if (spawnColonist(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
       return;
     }
 
     // Spawn a creep 'harvester'
-    // if (spawnHarvester(spawn, room) == OK) {
+    if (spawnHarvester(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
+      return;
+    }
+
+    // Spawn a creep 'builder'
+    if (spawnBuilder(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
+      return;
+    }
+
+    // Spawn a creep 'upgrader'
+    if (spawnUpgrader(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
+      return;
+    }
+    // Spawn a creep 'harvester'
+    if (spawnRepairman(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
+      return;
+    }
+    if (spawnCarrier(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
+      return;
+    }
+    if (spawnManager(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
+      return;
+    }
+    // Spawn a creep 'scout'
+    // if (spawnScout(spawn, room) == OK) {
+    //   let analyseCPUEnd = Game.cpu.getUsed();
+    //   Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
     //   return;
     // }
+    let analyseCPUEnd = Game.cpu.getUsed();
+    Logger.debug("Spawner execution use end: " + (analyseCPUEnd - analyseCPUStart));
   }
 };
 

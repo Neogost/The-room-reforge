@@ -5,11 +5,11 @@ import { Logger } from "./utils/Logger";
 var gameLoop: GameLoop;
 function unwrappedLoop() {
   let startAnalyseCPU = Game.cpu.getUsed();
-  console.log(`Current game tick is ${Game.time}`);
+  Logger.info("Current game tick is" + Game.time);
   if (gameLoop != null) {
     gameLoop.tick();
   } else {
-    console.log("Initialize game");
+    Logger.info("Initialize game");
     gameLoop = new GameLoop();
   }
   let endAnalyseCPU = Game.cpu.getUsed();

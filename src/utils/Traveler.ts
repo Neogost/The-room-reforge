@@ -26,11 +26,14 @@ export class Traveler {
     }
 
     if (creep.fatigue > 0) {
+      // console.log("Here fatigue ?");
       Traveler.circle(creep.pos, "aqua", 0.3);
       return ERR_TIRED;
     }
 
+    // console.log("before normalise " + destination);
     destination = this.normalizePos(destination);
+    // console.log("after normalise " + destination);
 
     // manage case where creep is nearby destination
     let rangeToDestination = creep.pos.getRangeTo(destination);
@@ -58,11 +61,15 @@ export class Traveler {
     let state = this.deserializeState(travelData, destination);
 
     // uncomment to visualize destination
+
+    // console.log("Here destination ?");
+    // console.log("destinatin : " + JSON.stringify(destination));
     this.circle(destination, "orange");
 
     // check if creep is stuck
     if (this.isStuck(creep, state)) {
       state.stuckCount++;
+      // console.log("Here stuck ?");
       Traveler.circle(creep.pos, "magenta", state.stuckCount * 0.2);
     } else {
       state.stuckCount = 0;
@@ -165,8 +172,10 @@ export class Traveler {
 
   public static normalizePos(destination: HasPos | RoomPosition): RoomPosition {
     if (!(destination instanceof RoomPosition)) {
+      //console.log("transformation");
       return destination.pos;
     }
+    //console.log("nothing");
     return destination;
   }
 

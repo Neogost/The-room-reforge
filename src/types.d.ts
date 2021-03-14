@@ -68,8 +68,8 @@ interface StructureMemoryMap<T> {
 interface LinkedMemoryMap<T> {
   [index: string]: T;
 }
-interface ScoutMemory {
-  [index: string]: ScoutOptions;
+interface ScoutMemoryMap<T> {
+  [index: string]: T;
 }
 
 interface HostileCreepMemoryMap<T> {
@@ -91,7 +91,7 @@ interface RoomMemory {
   linked: LinkedMemoryMap<LinkedRoomOptions>;
   /** Scouted room by the room */
   // FIXME : A faire quand je serais au scouting
-  scouted: ScoutMemory;
+  scouted: ScoutMemoryMap<ScoutOptions>;
   /** Links in the room */
   links: StructureLinkMemory;
   /** Hostile creep in the room */

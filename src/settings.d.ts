@@ -23,9 +23,14 @@ interface Settings {
 interface Colonisation {
   levelToMaintain: number;
 }
-interface LinkedRoomOptions {}
+interface LinkedRoomOptions {
+  roomName: string;
+}
 
-interface ScoutOptions {}
+interface ScoutOptions {
+  roomName: string;
+  lastScout?: number;
+}
 
 interface LinkOptions {}
 /**
@@ -65,6 +70,13 @@ interface StructureOptions {
   type: StructureConstant;
   /** Last ingame time where a creep was spawn for this structure */
   lastSpawn?: number;
+  /** The structure is a link ? it is a origine link ? Origine link send energy to other link */
+  linkOrigine?: boolean;
+  /** Informe if the controller have level up */
+  levelUp?: boolean | undefined;
+  level?: number | undefined;
+  /** position of the structure */
+  pos: RoomPosition;
 }
 
 /**
@@ -145,11 +157,13 @@ interface EffectsOptions {
  */
 interface ConsusOptions {
   // Colony role :
-  workers: number;
-  builders: number;
-  upgraders: number;
+  harvester: number;
+  carrier: number;
+  builder: number;
+  upgrader: number;
   repairmans: number;
-  managers: number;
+  manager: number;
+  colonist: number;
 
   // Empire role :
   helpers: number;

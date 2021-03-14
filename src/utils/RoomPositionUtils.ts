@@ -1,7 +1,7 @@
 import { List } from "lodash";
 
 /**
- * @author kevin desmay
+ * @author neoogst
  * Help to use the entity `RoomPosition`
  *
  * @version 1.0

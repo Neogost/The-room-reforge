@@ -43,7 +43,7 @@ export class RoomConstructionSiteUtils {
       if (linkedRoom) {
         // Scan structure in the linked room
         let csInLinkedRoom: List<ConstructionSite> = linkedRoom.find(FIND_CONSTRUCTION_SITES);
-        this.saveUpdateAllConstructionSites(linkedRoom, csInLinkedRoom);
+        this.saveUpdateAllConstructionSites(scannedRoom, csInLinkedRoom);
       } else {
         statut = NO_FULL_SCAN_DONE_LINKED;
         Logger.warning(scannedRoom.name + " : Cannot scan linked room : " + linkedRoomName);
@@ -123,5 +123,20 @@ export class RoomConstructionSiteUtils {
       return NO_FULL_SCAN_DONE;
     }
     return OK;
+  }
+
+  /**
+   * @description Delete a construction site in the room memory.
+   *
+   * @param room Room where the constructions site will be delete
+   * @param id Id of the construction site to delete in memory
+   * @returns statut of execution
+   */
+  public static deleteConstructionSite(room: Room, id: Id<ConstructionSite>): boolean {
+    if (room.memory.constructionsSites[id]) {
+      delete room.memory.constructionsSites[id];
+      return true;
+    }
+    return false;
   }
 }
