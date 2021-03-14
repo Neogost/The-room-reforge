@@ -1,5 +1,5 @@
 import { mockInstanceOf, mockStructure, mockGlobal } from "screeps-jest";
-import { TaskHarvest } from "./TaskHarvest";
+import { TaskHarvest } from "./TaskHarvestSomething";
 import { ERR_NO_TARGET, ERR_NO_AVAILABLE_CAPACITY, TRAVELER_MOVE } from "../utils/ConstantUtils";
 import { Traveler } from "../utils/Traveler";
 

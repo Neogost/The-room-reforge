@@ -44,7 +44,7 @@ export class RoomStructureUtils {
       if (linkedRoom) {
         // Scan structure in the linked room
         let structureInLinkedRoom: List<Structure> = linkedRoom.find(FIND_STRUCTURES);
-        this.saveUpdateAllStructures(linkedRoom, structureInLinkedRoom);
+        this.saveUpdateAllStructures(scannedRoom, structureInLinkedRoom);
       } else {
         statut = NO_FULL_SCAN_DONE_LINKED;
         Logger.warning(scannedRoom.name + " : Cannot scan linked room : " + linkedRoomName);
@@ -78,25 +78,45 @@ export class RoomStructureUtils {
 
     // Structure need to be repaired ?
     let needToBeRepair = structure.hits <= structure.hitsMax * Memory.settings.repairIndicator;
+    let linkOrigine: boolean | undefined;
+    // If the structure is a link, add information to know if she is origin or not.
+    if (structure.structureType === "link" && scannedRoom.controller) {
+      linkOrigine = !structure.pos.inRangeTo(scannedRoom.controller.pos, 5);
+    }
+
     // NOTE : Cette méthode gère la sauvegarde de l'entité StructureOption
     // FIXME : Récupération de l'owner d'une structure
     // Add in memory
     if (data === undefined) {
       _.set(scannedRoom.memory, ["structures", structure.id], {
+        id: structure.id,
         roomName: structure.room.name,
         type: structure.structureType,
         owner: "",
-        needRepair: needToBeRepair
+        needRepair: structure.structureType === STRUCTURE_CONTROLLER ? false : needToBeRepair,
+        linkOrigine: linkOrigine,
+        level: structure.structureType === STRUCTURE_CONTROLLER ? (<StructureController>structure).level : undefined,
+        levelUp: structure.structureType === STRUCTURE_CONTROLLER ? false : undefined,
+        pos: structure.pos
       } as StructureOptions);
     }
     // Update memory
     else {
       _.set(scannedRoom.memory["structures"], structure.id, {
+        id: structure.id,
         roomName: structure.room.name,
         owner: "",
         type: structure.structureType,
-        needRepair: needToBeRepair,
-        lastSpawn: scannedRoom.memory["structures"][structure.id].lastSpawn
+        needRepair: structure.structureType === "controller" ? false : needToBeRepair,
+        linkOrigine: linkOrigine,
+        pos: structure.pos,
+        lastSpawn: scannedRoom.memory["structures"][structure.id].lastSpawn,
+        levelUp:
+          structure.structureType === STRUCTURE_CONTROLLER &&
+          scannedRoom.memory["structures"][structure.id].level != (<StructureController>structure).level
+            ? true
+            : undefined,
+        level: structure.structureType === STRUCTURE_CONTROLLER ? (<StructureController>structure).level : undefined
       } as StructureOptions);
     }
   }

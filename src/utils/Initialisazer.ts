@@ -1,5 +1,15 @@
 import { Logger } from "./Logger";
-import { SETTINGS_RAMPARTS_BY_LEVEL } from "./ConstantUtils";
+import {
+  CREEP_BUILDER_DEFAULT_NUMBER,
+  CREEP_CARRIER_DEFAULT_NUMBER,
+  CREEP_COLONIST_DEFAULT_NUMBER,
+  CREEP_HARVESTER_DEFAULT_NUMBER,
+  CREEP_MANAGER_DEFAULT_NUMBER,
+  CREEP_REPAIRMANS_DEFAULT_NUMBER,
+  CREEP_SCOUT_DEFAULT_NUMBER,
+  CREEP_UPGRADER_DEFAULT_NUMBER,
+  SETTINGS_RAMPARTS_BY_LEVEL
+} from "./ConstantUtils";
 
 /**
  * Provides methods for initializing or resetting values ​​in memory.
@@ -74,19 +84,20 @@ export class Initializer {
     if (!room.memory.consus) {
       _.set(room.memory, ["consus"], {
         // Colony
-        colonist: 3,
-        workers: 2,
-        upgraders: 5,
-        builders: 1,
-        repairmans: 2,
-        managers: 2,
+        colonist: CREEP_COLONIST_DEFAULT_NUMBER,
+        harvester: CREEP_HARVESTER_DEFAULT_NUMBER,
+        carrier: CREEP_CARRIER_DEFAULT_NUMBER,
+        upgrader: CREEP_UPGRADER_DEFAULT_NUMBER,
+        builder: CREEP_BUILDER_DEFAULT_NUMBER,
+        repairmans: CREEP_REPAIRMANS_DEFAULT_NUMBER,
+        manager: CREEP_MANAGER_DEFAULT_NUMBER,
 
         // Empire
         helpers: 0,
         claimers: 0,
 
         // Army
-        scouts: 0,
+        scouts: CREEP_SCOUT_DEFAULT_NUMBER,
         infantrymans: 0
       } as ConsusOptions);
       statut = true;
