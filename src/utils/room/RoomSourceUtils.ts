@@ -1,4 +1,4 @@
-import { Logger } from "../Logger";
+import { List } from "lodash";
 import {
   DEPOSIT_SOURCE_OPTION,
   MINERAL_SOURCE_OPTION,
@@ -6,7 +6,7 @@ import {
   NO_FULL_SCAN_DONE_LINKED,
   SOURCE_SOURCE_OPTION
 } from "../ConstantUtils";
-import { List } from "lodash";
+import { Logger } from "../Logger";
 
 /**
  * @author kevin desmay

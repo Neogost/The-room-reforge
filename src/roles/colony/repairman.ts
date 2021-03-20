@@ -1,5 +1,3 @@
-import { ERR_NOTHING_TO_DO, ERR_NO_TARGET } from "../../utils/ConstantUtils";
-import { Traveler } from "../../utils/Traveler";
 import { CreepUtils } from "../../utils/CreepUtils";
 import { Tasks } from "../../task/Tasks";
 /**
@@ -67,7 +65,7 @@ const roleReparman = {
     // Can repair
     if (creep.memory.canRepair) {
       statutOfExecution = Tasks.repairSomething(creep, homeRoom);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution != ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
@@ -78,7 +76,7 @@ const roleReparman = {
     else {
       // than, go to STORAGE
       statutOfExecution = Tasks.refillToStorage(creep, homeRoom);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
@@ -86,7 +84,7 @@ const roleReparman = {
 
       // than, go to HARVEST
       statutOfExecution = Tasks.harvestSomething(creep, homeRoom);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;

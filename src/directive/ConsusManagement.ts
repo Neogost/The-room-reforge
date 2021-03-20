@@ -1,10 +1,10 @@
-import { Logger } from "../utils/Logger";
 import {
-  SOURCE_TYPE,
+  FIRST_LEVEL_STORAGE_STOCK,
   SECOND_LEVEL_STORAGE_STOCK,
-  THIRD_LEVEL_STORAGE_STOCK,
-  FIRST_LEVEL_STORAGE_STOCK
+  SOURCE_TYPE,
+  THIRD_LEVEL_STORAGE_STOCK
 } from "../utils/ConstantUtils";
+import { Logger } from "../utils/Logger";
 
 /**
  * @author Neogost
@@ -13,6 +13,7 @@ import {
  */
 export class ConsusManagement {
   public static manageConsus(room: Room) {
+    Logger.info("Ajust the Management of the room " + room.name);
     let analyseCPUStart = Game.cpu.getUsed();
     this.manageColonist(room);
     this.manageManager(room);
@@ -20,6 +21,19 @@ export class ConsusManagement {
     this.manageCarrier(room);
     this.manageRepairman(room);
 
+    let nbLinkedRoom = Object.keys(room.memory.linked).length;
+    if (nbLinkedRoom) {
+      room.memory.consus.reservist = nbLinkedRoom;
+      room.memory.consus.infantry = nbLinkedRoom;
+    }
+    if (room.storage && room.storage.store[RESOURCE_ENERGY] > SECOND_LEVEL_STORAGE_STOCK) {
+      room.memory.consus.builder = 2;
+      room.memory.consus.upgrader = 2;
+    }
+    let nbRoomToScout = Object.keys(room.memory.scouted).length;
+    if (nbRoomToScout > 5) {
+      room.memory.consus.scout = 1;
+    }
     let analyseCPUEnd = Game.cpu.getUsed();
     Logger.debug("Manage consus execution use :" + (analyseCPUEnd - analyseCPUStart));
   }

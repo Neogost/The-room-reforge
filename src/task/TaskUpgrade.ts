@@ -1,9 +1,8 @@
 import { Colonist } from "../roles/colony/colonist";
-import { CREEP_COLONIST, ERR_NOTHING_TO_DO } from "../utils/ConstantUtils";
-import { CreepUtils } from "../utils/CreepUtils";
-import { Traveler } from "../utils/Traveler";
-import { Upgrader } from "../roles/colony/upgrader";
 import { Harvester } from "../roles/colony/harvester";
+import { Upgrader } from "../roles/colony/upgrader";
+import { CREEP_COLONIST, ERR_NOTHING_TO_DO } from "../utils/ConstantUtils";
+import { Traveler } from "../utils/Traveler";
 /**
  * @author Neogost
  * Perform the action to harvest a resource.

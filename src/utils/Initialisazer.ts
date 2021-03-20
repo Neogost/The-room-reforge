@@ -1,15 +1,17 @@
-import { Logger } from "./Logger";
 import {
   CREEP_BUILDER_DEFAULT_NUMBER,
   CREEP_CARRIER_DEFAULT_NUMBER,
   CREEP_COLONIST_DEFAULT_NUMBER,
   CREEP_HARVESTER_DEFAULT_NUMBER,
+  CREEP_INFANTRY_DEFAULT_NUMBER,
   CREEP_MANAGER_DEFAULT_NUMBER,
   CREEP_REPAIRMANS_DEFAULT_NUMBER,
+  CREEP_RESERVIST_DEFAULT_NUMBER,
   CREEP_SCOUT_DEFAULT_NUMBER,
   CREEP_UPGRADER_DEFAULT_NUMBER,
   SETTINGS_RAMPARTS_BY_LEVEL
 } from "./ConstantUtils";
+import { Logger } from "./Logger";
 
 /**
  * Provides methods for initializing or resetting values ​​in memory.
@@ -92,13 +94,15 @@ export class Initializer {
         repairmans: CREEP_REPAIRMANS_DEFAULT_NUMBER,
         manager: CREEP_MANAGER_DEFAULT_NUMBER,
 
+        // Extension
+        reservist: CREEP_RESERVIST_DEFAULT_NUMBER,
         // Empire
         helpers: 0,
         claimers: 0,
 
         // Army
-        scouts: CREEP_SCOUT_DEFAULT_NUMBER,
-        infantrymans: 0
+        scout: CREEP_SCOUT_DEFAULT_NUMBER,
+        infantry: CREEP_INFANTRY_DEFAULT_NUMBER
       } as ConsusOptions);
       statut = true;
     }

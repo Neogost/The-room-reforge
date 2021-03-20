@@ -1,14 +1,6 @@
 import { Tasks } from "../../task/Tasks";
-import {
-  CONSTRUCTION_SITE_TYPE,
-  ERR_NOTHING_TO_DO,
-  ERR_NO_TARGET,
-  ERR_NO_WORKING_STATION,
-  SOURCE_TYPE
-} from "../../utils/ConstantUtils";
+import { ERR_NOTHING_TO_DO, ERR_NO_TARGET } from "../../utils/ConstantUtils";
 import { CreepUtils } from "../../utils/CreepUtils";
-import { RoomConstructionSiteUtils } from "../../utils/room/RoomConstructionSiteUtils";
-import { Traveler } from "../../utils/Traveler";
 
 /**
  * @description A buildder is there to build structure in a colony.

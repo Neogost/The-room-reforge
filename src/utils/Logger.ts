@@ -3,25 +3,25 @@ export class Logger {
 
   public static info(message: string): void {
     if (this.level >= 1) {
-      console.log("[INFO] " + message);
+      console.log("<span style='color:green'>[INFO] " + message);
     }
   }
 
   public static warning(message: string): void {
     if (this.level >= 2) {
-      console.log("[WARNING] " + message);
+      console.log("<span style='color:orange'>[WARNING] " + message);
     }
   }
 
   public static error(message: string): void {
     if (this.level >= 1) {
-      console.log("[ERROR] " + message);
+      console.log("<span style='color:red'>[ERROR] " + message);
     }
   }
 
   public static debug(message: string): void {
     if (this.level >= 3) {
-      console.log("[DEBUG] " + message);
+      console.log("<span style='color:yellow'>[DEBUG] " + message);
     }
   }
 

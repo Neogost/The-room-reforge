@@ -25,6 +25,8 @@ interface Colonisation {
 }
 interface LinkedRoomOptions {
   roomName: string;
+  lastSpawn?: number;
+  lastSentry?: number;
 }
 
 interface ScoutOptions {
@@ -164,12 +166,14 @@ interface ConsusOptions {
   repairmans: number;
   manager: number;
   colonist: number;
+  // Expension
+  reservist: number;
 
   // Empire role :
   helpers: number;
   claimers: number;
 
   // Army role :
-  scouts: number;
-  infantrymans: number;
+  scout: number;
+  infantry: number;
 }

@@ -1,6 +1,6 @@
-import { Logger } from "../Logger";
-import { NO_FULL_SCAN_DONE, NO_FULL_SCAN_DONE_LINKED } from "../ConstantUtils";
 import { List } from "lodash";
+import { NO_FULL_SCAN_DONE, NO_FULL_SCAN_DONE_LINKED } from "../ConstantUtils";
+import { Logger } from "../Logger";
 
 /**
  * @author kevin desmay

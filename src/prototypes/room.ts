@@ -1,5 +1,3 @@
-import { Logger } from "../utils/Logger";
-
 Room.prototype.addLinked = function (roomName: string): void {
   if (!this.memory.linked) {
     this.initializeLinkedRoom();

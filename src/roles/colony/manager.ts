@@ -1,5 +1,4 @@
 import { Tasks } from "../../task/Tasks";
-import { ERR_NO_TARGET, ERR_NOTHING_TO_DO } from "../../utils/ConstantUtils";
 import { CreepUtils } from "../../utils/CreepUtils";
 
 /**
@@ -68,14 +67,14 @@ const roleManager = {
     let roomHome = Game.rooms[creep.memory.homeRoomName];
     if (canMove) {
       statutOfExecution = Tasks.refillToStorage(creep, roomHome);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
       }
     } else {
-      Tasks.transfertToEssentialStructure(creep, roomHome);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      statutOfExecution = Tasks.transfertToEssentialStructure(creep, roomHome);
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;

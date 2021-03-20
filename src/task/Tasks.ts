@@ -1,17 +1,20 @@
-import { TaskHarvestSomething } from "./TaskHarvestSomething";
-import { Colonist } from "../roles/colony/colonist";
-import { TaskBuild } from "./TaskBuild";
-import { TaskUpgrade } from "./TaskUpgrade";
-import { TaskTransfertToEssential } from "./TaskTransfertToEssential";
-import { Harvester } from "../roles/colony/harvester";
-import { Upgrader } from "../roles/colony/upgrader";
 import { Builder } from "../roles/colony/builider";
-import { Repairman } from "../roles/colony/repairman";
-import { TaskRepair } from "./TaskRepair";
-import { TaskRefillToStorage } from "./TaskRefillToStorage";
 import { Carrier } from "../roles/colony/carrier";
-import { TaskTransfertToStorage } from "./TaskTransfertToStorage";
+import { Colonist } from "../roles/colony/colonist";
+import { Harvester } from "../roles/colony/harvester";
 import { Manager } from "../roles/colony/manager";
+import { Repairman } from "../roles/colony/repairman";
+import { Upgrader } from "../roles/colony/upgrader";
+import { TaskBuild } from "./TaskBuild";
+import { TaskHarvest } from "./TaskHarvest";
+import { TaskHarvestSomething } from "./TaskHarvestSomething";
+import { TaskRefillToLink } from "./TaskRefillToLink";
+import { TaskRefillToStorage } from "./TaskRefillToStorage";
+import { TaskRepair } from "./TaskRepair";
+import { TaskTransfertToContainer } from "./TaskTransfertToContainer";
+import { TaskTransfertToEssential } from "./TaskTransfertToEssential";
+import { TaskTransfertToStorage } from "./TaskTransfertToStorage";
+import { TaskUpgrade } from "./TaskUpgrade";
 
 /**
  * Define all type of task than a creep can do.
@@ -19,6 +22,9 @@ import { Manager } from "../roles/colony/manager";
 export class Tasks {
   public static harvestSomething(creep: Colonist | Upgrader | Builder | Repairman, room: Room): number {
     return TaskHarvestSomething.doTask(creep, room);
+  }
+  public static harvest(creep: Harvester) {
+    return TaskHarvest.doTask(creep);
   }
 
   public static buildSomething(creep: Colonist | Harvester | Builder, room: Room): number {
@@ -36,6 +42,12 @@ export class Tasks {
     return TaskTransfertToEssential.doTask(creep, room);
   }
 
+  public static transfertToStorage(creep: Harvester | Carrier | Colonist, room: Room): number {
+    return TaskTransfertToStorage.doTask(creep, room);
+  }
+  public static transfertToContainer(creep: Harvester): number {
+    return TaskTransfertToContainer.doTask(creep);
+  }
   public static repairSomething(creep: Repairman, room: Room): number {
     return TaskRepair.doTask(creep, room);
   }
@@ -43,7 +55,7 @@ export class Tasks {
     return TaskRefillToStorage.doTask(creep, room);
   }
 
-  public static transfertToStorage(creep: Harvester | Carrier | Colonist, room: Room): number {
-    return TaskTransfertToStorage.doTask(creep, room);
+  public static refillToLink(creep: Upgrader, room: Room): number {
+    return TaskRefillToLink.doTask(creep, room);
   }
 }

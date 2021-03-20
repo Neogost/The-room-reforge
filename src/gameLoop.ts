@@ -1,39 +1,41 @@
+import { List } from "lodash";
+import "prototypes/creep";
 import "prototypes/room";
 import "prototypes/roomPosition";
-import "prototypes/creep";
-import { Logger } from "./utils/Logger";
-import { Initializer } from "./utils/Initialisazer";
-import { RoomSourceUtils } from "./utils/room/RoomSourceUtils";
-import { RoomConstructionSiteUtils } from "./utils/room/RoomConstructionSiteUtils";
-import { RoomCreepUtils } from "./utils/room/RoomCreepUtils";
-import { RoomStructureUtils } from "./utils/room/RoomStructureUtils";
-import spawners from "./rooms/spawner";
-import {
-  CREEP_COLONIST,
-  CREEP_BUILDER,
-  CREEP_UPGRADER,
-  CREEP_HARVESTER,
-  CREEP_SCOUT,
-  SOURCE_TYPE,
-  CREEP_REPAIRMANS,
-  CREEP_CARRIER
-} from "./utils/ConstantUtils";
-import roleColonist, { Colonist } from "./roles/colony/colonist";
-import roleBuilder, { Builder } from "./roles/colony/builider";
-import towers from "./rooms/tower";
-import roleUpgrader from "./roles/colony/upgrader";
-import { Upgrader } from "./roles/colony/upgrader";
-import roleHarvester, { Harvester } from "./roles/colony/harvester";
-import roleScout from "./roles/army/scout";
-import { Scout } from "./roles/army/scout";
-import roleReparman, { Repairman } from "./roles/colony/repairman";
-import roleCarrier, { Carrier } from "./roles/colony/carrier";
-import { CREEP_MANAGER } from "./utils/ConstantUtils";
-import roleManager, { Manager } from "./roles/colony/manager";
+import { BaseCircle } from "./base/circle";
 import { ConsusManagement } from "./directive/ConsusManagement";
 import { Flags } from "./flags/Flags";
-import { BaseCircle } from "./base/circle";
-import { List } from "lodash";
+import roleInfantry, { Infantry } from "./roles/army/infantry";
+import roleReservist, { Reservist } from "./roles/army/reservist";
+import roleScout, { Scout } from "./roles/army/scout";
+import roleBuilder, { Builder } from "./roles/colony/builider";
+import roleCarrier, { Carrier } from "./roles/colony/carrier";
+import roleColonist, { Colonist } from "./roles/colony/colonist";
+import roleHarvester, { Harvester } from "./roles/colony/harvester";
+import roleManager, { Manager } from "./roles/colony/manager";
+import roleReparman, { Repairman } from "./roles/colony/repairman";
+import roleUpgrader, { Upgrader } from "./roles/colony/upgrader";
+import links from "./rooms/link";
+import spawners from "./rooms/spawner";
+import towers from "./rooms/tower";
+import {
+  CREEP_BUILDER,
+  CREEP_CARRIER,
+  CREEP_COLONIST,
+  CREEP_HARVESTER,
+  CREEP_INFANTRY,
+  CREEP_MANAGER,
+  CREEP_REPAIRMANS,
+  CREEP_RESERVIST,
+  CREEP_SCOUT,
+  CREEP_UPGRADER
+} from "./utils/ConstantUtils";
+import { Initializer } from "./utils/Initialisazer";
+import { Logger } from "./utils/Logger";
+import { RoomConstructionSiteUtils } from "./utils/room/RoomConstructionSiteUtils";
+import { RoomCreepUtils } from "./utils/room/RoomCreepUtils";
+import { RoomSourceUtils } from "./utils/room/RoomSourceUtils";
+import { RoomStructureUtils } from "./utils/room/RoomStructureUtils";
 
 /**
  * Definie the game structure execution. Each tick is an instance of this object. the `GameLoop` do everything is needed.
@@ -103,6 +105,8 @@ export class GameLoop {
           RoomCreepUtils.scanHostile(room);
           RoomStructureUtils.scan(room);
 
+          // Manage consus
+          ConsusManagement.manageConsus(room);
           this.executeBasePattern(room);
         }
       });
@@ -155,6 +159,7 @@ export class GameLoop {
       if (room.controller && room.controller.my) {
         spawners.run(room);
         towers.run(room);
+        links.run(room);
       }
     });
   }
@@ -165,8 +170,6 @@ export class GameLoop {
     })[0];
 
     if (controlerStatut.levelUp) {
-      // Manage consus
-      ConsusManagement.manageConsus(room);
       // generate base
       let spawns: List<StructureSpawn> = <List<StructureSpawn>>room.find(FIND_MY_STRUCTURES, {
         filter: { structureType: STRUCTURE_SPAWN, name: "Spawn1" }
@@ -177,7 +180,7 @@ export class GameLoop {
         pos.x = pos.x + 1;
         pos.y = pos.y - 1;
         let autoBase = new BaseCircle(pos, room);
-        autoBase.buildBase(room.controller.level);
+        autoBase.buildBase(room.controller!.level);
       }
     }
   }
@@ -207,6 +210,14 @@ export class GameLoop {
           return;
         case CREEP_MANAGER:
           roleManager.run(creep as Manager);
+          return;
+
+        // ARMY
+        case CREEP_INFANTRY:
+          roleInfantry.run(creep as Infantry);
+          return;
+        case CREEP_RESERVIST:
+          roleReservist.run(creep as Reservist);
           return;
         case CREEP_SCOUT:
           roleScout.run(creep as Scout);

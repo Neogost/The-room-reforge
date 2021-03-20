@@ -1,6 +1,6 @@
 import { List } from "lodash";
-import { Logger } from "../utils/Logger";
 import { ERR_NOTHING_TO_DO } from "../utils/ConstantUtils";
+import { Logger } from "../utils/Logger";
 
 const towers = {
   /**

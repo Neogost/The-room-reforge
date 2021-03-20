@@ -1,6 +1,3 @@
-import { Traveler } from "../utils/Traveler";
-import { ERR_NO_TARGET } from "../utils/ConstantUtils";
-
 // Creep.prototype.harvestEnergy = function harvestEnergy(): number {
 //   //  TO DO : result value
 //   let target: Source | undefined | null;

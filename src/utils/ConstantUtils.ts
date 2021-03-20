@@ -7,6 +7,8 @@ export const CREEP_REPAIRMANS = "repairmans";
 export const CREEP_CARRIER = "carrier";
 export const CREEP_MANAGER = "manager";
 export const CREEP_SCOUT = "scout";
+export const CREEP_RESERVIST = "reservist";
+export const CREEP_INFANTRY = "infantry";
 
 // =========================== CREEP DEFAULT ====================
 export const CREEP_HARVESTER_DEFAULT_NUMBER = 0;
@@ -16,30 +18,61 @@ export const CREEP_UPGRADER_DEFAULT_NUMBER = 2;
 export const CREEP_REPAIRMANS_DEFAULT_NUMBER = 0;
 export const CREEP_CARRIER_DEFAULT_NUMBER = 0;
 export const CREEP_MANAGER_DEFAULT_NUMBER = 1;
+//
+export const CREEP_INFANTRY_DEFAULT_NUMBER = 0;
 export const CREEP_SCOUT_DEFAULT_NUMBER = 0;
+export const CREEP_RESERVIST_DEFAULT_NUMBER = 0;
 
 // =========================== CREEP BODY PART =====================
 export const DEFAULT_BODY = [WORK, CARRY, MOVE]; // 200 (but 300 minimal to spawn)
 export const DEFAULT_LIMIT = 8;
+
 export const MANAGER_BODY = [CARRY, MOVE]; // 100 (but 300 minimal to spawn)
 export const MANAGER_LIMIT = 8;
+
+export const RESERVIST_LIMIT = 1;
+export const RESERVIST_BODY = [MOVE, MOVE, CLAIM, CLAIM]; // 1300
 
 export const HARVESTER_MINIMAL_BODY = [WORK, CARRY, MOVE]; // 200 (but 300 minimal to spawn)
 export const HARVESTER_MINIMAL_LIMIT = 5;
 export const HARVESTER_DEDICATED_BODY = [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE]; // 800 energy
 export const HARVESTER_DEDICATED_LIMIT = 1;
 
-export const CARRIER_DEDICATED_BODY = [MOVE, MOVE, MOVE, CARRY, CARRY, CARRY]; // 300 energy
+export const CARRIER_DEDICATED_BODY = [
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY
+]; // 300 energy
 export const CARRIER_DEDICATED_LIMIT = 5;
 
 export const UPGRADER_MINIMAL_BODY = [WORK, CARRY, MOVE]; // 200 (but 300 minimal to spawn)
 export const UPGRADER_MINIMAL_LIMIT = 5;
-export const UPGRADER_DEDICATED_BODY = [WORK, WORK, WORK, CARRY, MOVE, MOVE]; // 400 energy
+export const UPGRADER_DEDICATED_BODY = [WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE]; // 400 energy
 export const UPGRADER_DEDICATED_LIMIT = 1;
+
+export const REPAIRMAN_MINIMAL_BODY = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+export const REPAIRMAN_DMINIMAL_LIMIT = 5;
 
 export const SCOUT_BODY = [MOVE, MOVE]; // 100 (but 300 minimal to spawn)
 export const SCOUT_LIMIT = 1;
 
+export const INFANTRY_BODY = [ATTACK, MOVE];
+export const INFANTRY_LIMIT = 8;
 // =========================== CREEP ERROR CODE ====================
 export const ERR_NO_TARGET = -1000;
 export const ERR_NOT_ALREADY_IN_RANGE = -1001;

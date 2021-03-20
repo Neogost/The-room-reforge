@@ -1,12 +1,9 @@
-import { Repairman } from "../roles/colony/repairman";
-import { Harvester } from "../roles/colony/harvester";
-import { CreepUtils } from "../utils/CreepUtils";
-import { Traveler } from "../utils/Traveler";
-import { ERR_NOTHING_TO_DO, ERR_NO_TARGET } from "../utils/ConstantUtils";
 import { Builder } from "../roles/colony/builider";
-import { Carrier } from "../roles/colony/carrier";
-import { Upgrader } from "../roles/colony/upgrader";
 import { Manager } from "../roles/colony/manager";
+import { Repairman } from "../roles/colony/repairman";
+import { Upgrader } from "../roles/colony/upgrader";
+import { ERR_NO_TARGET } from "../utils/ConstantUtils";
+import { Traveler } from "../utils/Traveler";
 /**
  * @author Neogost
  * Perform the action to harvest a resource.

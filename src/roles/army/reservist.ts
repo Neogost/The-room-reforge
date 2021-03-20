@@ -1,3 +1,6 @@
+import { ERR_NO_TARGET } from "../../utils/ConstantUtils";
+import { CreepUtils } from "../../utils/CreepUtils";
+import { Traveler } from "../../utils/Traveler";
 /**
  * @description A buildder is there to build structure in a colony.
  * This creep is able to perform several types of actions such as harvesting, crafting and reload.
@@ -18,26 +21,13 @@ export interface Reservist extends Creep {
 export class ReservistMemory implements CreepMemory {
   role: string = "reservist";
   homeRoomName: string;
-  /** Where the creep have to go to work */
-  workingStation: string;
 
   /** Creep's target to harvest energy */
-  targetSourceId: Id<Source> | undefined;
+  targetController: Id<StructureController> | undefined;
   /** Creep's target's to harvest position. Where is the task to do */
-  _targetSourcePos: RoomPosition | undefined;
-
-  /** Target to do build something */
-  targetBuildId: Id<ConstructionSite> | undefined;
-  /** Target's pos to do buildf energy. Where is the task to do */
-  _targetBuildPos: RoomPosition | undefined;
-
-  /** Storage where the builder is linked */
-  storageId?: Id<StructureStorage>;
-  /** Position of the storage */
-  _storagePos?: RoomPosition;
-
-  /** The creep are ready to build something */
-  canBuild: boolean;
+  _targetControllerPos: RoomPosition | undefined;
+  /** Creep's target's to harvest position. Where is the task to do */
+  _targetControllerRoom: string | undefined;
 
   _trav: any;
   _travel: any;
@@ -47,19 +37,36 @@ export class ReservistMemory implements CreepMemory {
    * @param currentRoom Room where the creep is actualy
    * @param storage Storage who are a reference to take energy for this creep
    */
-  constructor(currentRoom: Room, storage?: StructureStorage) {
+  constructor(currentRoom: Room, controller: StructureController) {
     this.homeRoomName = currentRoom.name;
-    this.workingStation = currentRoom.name;
-    this.canBuild = false;
-    if (storage) {
-      this.storageId = storage.id;
-      this._storagePos = storage.pos;
-    }
+    this.targetController = controller.id;
+    this._targetControllerPos = controller.pos;
+    this._targetControllerRoom = controller.room.name;
   }
 }
 
 const roleReservist = {
-  run(creep: Reservist) {}
+  run(creep: Reservist) {
+    let analyseCPUStart = Game.cpu.getUsed();
+    if (creep.memory._targetControllerPos) {
+      let pos = new RoomPosition(
+        creep.memory._targetControllerPos.x,
+        creep.memory._targetControllerPos.y,
+        creep.memory._targetControllerPos.roomName
+      );
+      if (creep.pos.isNearTo(pos)) {
+        CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
+
+        return creep.reserveController(creep.room!.controller!);
+      } else {
+        CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
+        return Traveler.travelTo(creep, pos);
+      }
+    } else {
+      CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
+      return ERR_NO_TARGET;
+    }
+  }
 };
 
 export default roleReservist;

@@ -1,10 +1,10 @@
-import { ERR_NO_TARGET, ERR_NO_AVAILABLE_CAPACITY, TRAVELER_MOVE } from "../utils/ConstantUtils";
+import { Builder } from "../roles/colony/builider";
+import { Colonist } from "../roles/colony/colonist";
+import { Repairman } from "../roles/colony/repairman";
+import { Upgrader } from "../roles/colony/upgrader";
+import { ERR_NO_TARGET } from "../utils/ConstantUtils";
 import { CreepUtils } from "../utils/CreepUtils";
 import { Traveler } from "../utils/Traveler";
-import { Colonist } from "../roles/colony/colonist";
-import { Upgrader } from "../roles/colony/upgrader";
-import { Builder } from "../roles/colony/builider";
-import { Repairman } from "../roles/colony/repairman";
 
 /**
  * @author Neogost

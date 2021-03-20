@@ -15,7 +15,7 @@ export class TaskTransfertToStorage {
   }
   static transferToStorage(creep: any, room: Room): number {
     let storage = room.storage;
-    if (!storage) {
+    if (!storage || storage.store.getCapacity() === 0) {
       return ERR_NO_TARGET;
     }
 

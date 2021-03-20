@@ -1,56 +1,67 @@
 import { List } from "lodash";
+import { InfantrytMemory } from "../roles/army/infantry";
+import { ReservistMemory } from "../roles/army/reservist";
+import { Scout, ScoutMemory } from "../roles/army/scout";
+import { Builder, BuilderMemory } from "../roles/colony/builider";
+import { CarrierMemory } from "../roles/colony/carrier";
 import { Colonist, ColonistMemory } from "../roles/colony/colonist";
-import { BuilderMemory, Builder } from "../roles/colony/builider";
+import { Harvester, HarvesterMemory } from "../roles/colony/harvester";
+import { Manager, ManagerMemory } from "../roles/colony/manager";
+import { Repairman, RepairmanMemory } from "../roles/colony/repairman";
+import { Upgrader, UpgraderMemory } from "../roles/colony/upgrader";
 import {
-  ERR_NOTHING_TO_DO,
-  SOURCE_TYPE,
-  HARVESTER_DEDICATED_BODY,
-  CREEP_CARRIER,
   CARRIER_DEDICATED_BODY,
-  CREEP_HARVESTER,
-  HARVESTER_MINIMAL_BODY,
-  SECOND_LEVEL_STORAGE_STOCK,
-  DEFAULT_BODY,
-  CREEP_COLONIST,
-  SCOUT_BODY,
-  UPGRADER_DEDICATED_BODY,
-  UPGRADER_MINIMAL_BODY,
-  HARVESTER_MINIMAL_LIMIT,
   CARRIER_DEDICATED_LIMIT,
-  CREEP_CARRIER_DEFAULT_NUMBER,
-  CREEP_HARVESTER_DEFAULT_NUMBER,
-  CREEP_COLONIST_DEFAULT_NUMBER,
-  CREEP_SCOUT_DEFAULT_NUMBER,
-  CREEP_REPAIRMANS_DEFAULT_NUMBER,
-  CREEP_MANAGER_DEFAULT_NUMBER,
+  CREEP_BUILDER,
   CREEP_BUILDER_DEFAULT_NUMBER,
+  CREEP_CARRIER,
+  CREEP_CARRIER_DEFAULT_NUMBER,
+  CREEP_COLONIST,
+  CREEP_COLONIST_DEFAULT_NUMBER,
+  CREEP_HARVESTER,
+  CREEP_HARVESTER_DEFAULT_NUMBER,
+  CREEP_INFANTRY,
+  CREEP_INFANTRY_DEFAULT_NUMBER,
+  CREEP_MANAGER,
+  CREEP_MANAGER_DEFAULT_NUMBER,
+  CREEP_REPAIRMANS,
+  CREEP_REPAIRMANS_DEFAULT_NUMBER,
+  CREEP_RESERVIST,
+  CREEP_RESERVIST_DEFAULT_NUMBER,
+  CREEP_SCOUT,
+  CREEP_SCOUT_DEFAULT_NUMBER,
+  CREEP_UPGRADER,
   CREEP_UPGRADER_DEFAULT_NUMBER,
-  HARVESTER_DEDICATED_LIMIT
-} from "../utils/ConstantUtils";
-
-import {
-  ERR_NO_SPAWN_SELECTED,
+  DEFAULT_BODY,
+  DEFAULT_LIMIT,
+  ERR_FULL_CREEP,
+  ERR_NOTHING_TO_DO,
   ERR_NO_ROLE_FOR_CREEP,
   ERR_NO_ROOM_SELECTED,
-  ERR_FULL_CREEP
+  ERR_NO_SPAWN_SELECTED,
+  HARVESTER_DEDICATED_BODY,
+  HARVESTER_DEDICATED_LIMIT,
+  HARVESTER_MINIMAL_BODY,
+  HARVESTER_MINIMAL_LIMIT,
+  INFANTRY_BODY,
+  INFANTRY_LIMIT,
+  MANAGER_BODY,
+  MANAGER_LIMIT,
+  REPAIRMAN_DMINIMAL_LIMIT,
+  REPAIRMAN_MINIMAL_BODY,
+  RESERVIST_BODY,
+  RESERVIST_LIMIT,
+  SCOUT_BODY,
+  SCOUT_LIMIT,
+  SECOND_LEVEL_STORAGE_STOCK,
+  SOURCE_TYPE,
+  UPGRADER_DEDICATED_BODY,
+  UPGRADER_DEDICATED_LIMIT,
+  UPGRADER_MINIMAL_BODY,
+  UPGRADER_MINIMAL_LIMIT
 } from "../utils/ConstantUtils";
-import { UpgraderMemory, Upgrader } from "../roles/colony/upgrader";
-import { Harvester, HarvesterMemory } from "../roles/colony/harvester";
 import { Logger } from "../utils/Logger";
-import { ScoutMemory, Scout } from "../roles/army/scout";
-import { RepairmanMemory, Repairman } from "../roles/colony/repairman";
-import { CarrierMemory } from "../roles/colony/carrier";
-import { ManagerMemory, Manager } from "../roles/colony/manager";
-import { MANAGER_LIMIT, DEFAULT_LIMIT } from "../utils/ConstantUtils";
-import { SCOUT_LIMIT, UPGRADER_DEDICATED_LIMIT, UPGRADER_MINIMAL_LIMIT } from "../utils/ConstantUtils";
-import {
-  CREEP_MANAGER,
-  CREEP_REPAIRMANS,
-  CREEP_SCOUT,
-  CREEP_BUILDER,
-  CREEP_UPGRADER,
-  MANAGER_BODY
-} from "../utils/ConstantUtils";
+
 /**
  * @description Get the body of a new creep base on a `segment` and energy available in the `room` who will produce it.
  *
@@ -131,10 +142,16 @@ function getBodyPattern(room: Room, role: string, link?: StructureLink): Array<B
       return CARRIER_DEDICATED_BODY;
     case CREEP_COLONIST:
       return DEFAULT_BODY;
+    case CREEP_REPAIRMANS:
+      return REPAIRMAN_MINIMAL_BODY;
+    case CREEP_RESERVIST:
+      return RESERVIST_BODY;
 
     // ===== ARMY
     case CREEP_SCOUT:
       return SCOUT_BODY;
+    case CREEP_INFANTRY:
+      return INFANTRY_BODY;
     // ===== DEFAULT
     default:
       return DEFAULT_BODY;
@@ -174,8 +191,13 @@ function getBodyLimit(room: Room, role: string, link?: StructureLink): number {
       return CARRIER_DEDICATED_LIMIT;
     case CREEP_COLONIST:
       return DEFAULT_LIMIT;
-
+    case CREEP_REPAIRMANS:
+      return REPAIRMAN_DMINIMAL_LIMIT;
+    case CREEP_RESERVIST:
+      return RESERVIST_LIMIT;
     // ===== ARMY
+    case CREEP_INFANTRY:
+      return INFANTRY_LIMIT;
     case CREEP_SCOUT:
       return SCOUT_LIMIT;
 
@@ -208,7 +230,7 @@ function spawnCarrier(spawn: StructureSpawn, room: Room): number {
     if (Game.time - (container.lastSpawn || 0) > CREEP_LIFE_TIME) {
       let containerStatut: StructureContainer = <StructureContainer>Game.getObjectById(container.id);
       // Check if the container is not empty, if it is empty, the container is may be not used
-      if (containerStatut.store[RESOURCE_ENERGY] > 200) {
+      if (containerStatut && containerStatut.store[RESOURCE_ENERGY] > 200) {
         // Spawn a Carrier
         result = spawnGenericCreep(
           spawn,
@@ -372,6 +394,65 @@ function spawnManager(spawn: StructureSpawn, room: Room): number {
   return result;
 }
 
+function spawnInfantry(spawn: StructureSpawn, room: Room): number {
+  let result = -1;
+  _.forEach(room.memory.linked, function (linked) {
+    if (linked.roomName) {
+      let targetedRoom = Game.rooms[linked.roomName];
+      if (targetedRoom && targetedRoom.controller && Game.time - (linked.lastSentry || 0) > CREEP_LIFE_TIME) {
+        result = spawnGenericCreep(
+          spawn,
+          room,
+          CREEP_INFANTRY,
+          getBodyPattern(room, CREEP_INFANTRY),
+          getBodyLimit(room, CREEP_INFANTRY),
+          CREEP_INFANTRY_DEFAULT_NUMBER,
+          {
+            memory: new InfantrytMemory(room, true, targetedRoom.controller)
+          }
+        );
+        // The harvester is spawned, no need to continue the forEach
+        if (result == OK) {
+          // Set the time code when the Harvester was spawn on the source, in memory
+          linked.lastSentry = Game.time;
+          return false;
+        }
+      }
+    }
+    return true;
+  });
+  return result;
+}
+
+function spawnReservist(spawn: StructureSpawn, room: Room): number {
+  let result = -1;
+  _.forEach(room.memory.linked, function (linked) {
+    if (linked.roomName) {
+      let targetedRoom = Game.rooms[linked.roomName];
+      if (targetedRoom && targetedRoom.controller && Game.time - (linked.lastSpawn || 0) > CREEP_LIFE_TIME) {
+        result = spawnGenericCreep(
+          spawn,
+          room,
+          CREEP_RESERVIST,
+          getBodyPattern(room, CREEP_RESERVIST),
+          getBodyLimit(room, CREEP_RESERVIST),
+          CREEP_RESERVIST_DEFAULT_NUMBER,
+          {
+            memory: new ReservistMemory(room, targetedRoom.controller)
+          }
+        );
+        // The harvester is spawned, no need to continue the forEach
+        if (result == OK) {
+          // Set the time code when the Harvester was spawn on the source, in memory
+          linked.lastSpawn = Game.time;
+          return false;
+        }
+      }
+    }
+    return true;
+  });
+  return result;
+}
 /**
  * Generate a new creep 'Builder'.
  * @param spawn spawn try to do the action of spawn a `Builder`
@@ -410,7 +491,7 @@ function spawnUpgrader(spawn: StructureSpawn, room: Room): number {
   let result = -1;
   let link: StructureLink | undefined;
   let structureLinksDestination = _.filter(room.memory.structures, function (structure) {
-    return structure.linkOrigine === false;
+    return structure.type === STRUCTURE_LINK && structure.linkOrigine === false;
   });
   if (structureLinksDestination.length > 0) {
     link = <StructureLink>Game.getObjectById(structureLinksDestination[0].id);
@@ -557,6 +638,18 @@ const spawners = {
       return;
     }
     if (spawnManager(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
+      return;
+    }
+
+    if (spawnInfantry(spawn, room) == OK) {
+      let analyseCPUEnd = Game.cpu.getUsed();
+      Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
+      return;
+    }
+
+    if (spawnReservist(spawn, room) == OK) {
       let analyseCPUEnd = Game.cpu.getUsed();
       Logger.debug("Spawner execution use : " + (analyseCPUEnd - analyseCPUStart));
       return;

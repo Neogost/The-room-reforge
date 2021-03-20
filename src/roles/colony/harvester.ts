@@ -1,13 +1,4 @@
 import { CreepUtils } from "../../utils/CreepUtils";
-import {
-  ERR_NO_WORKING_STATION,
-  ERR_NOTHING_TO_DO,
-  STRUCTURE_TYPE,
-  CONSTRUCTION_SITE_TYPE,
-  ERR_NO_TARGET
-} from "../../utils/ConstantUtils";
-import { Traveler } from "../../utils/Traveler";
-import { TaskTransfertToEssential } from "../../task/TaskTransfertToEssential";
 import { Tasks } from "../../task/Tasks";
 /**
  * @description A harveser is there to harvest ressource. Nothing more if he have a container to store energy.
@@ -111,69 +102,27 @@ const roleHarvester = {
     let statutOfExecution: number = OK;
 
     let roomHome = Game.rooms[creep.memory.homeRoomName];
-    let targetId = creep.memory.targetId;
     if (canHarverst) {
-      if (!targetId) {
+      // Harvest pre selected source
+      statutOfExecution = Tasks.harvest(creep);
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
+        tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
-        return ERR_NOTHING_TO_DO;
+        return OK;
       }
-
-      let target = Game.getObjectById(targetId);
-      if (!target && !CreepUtils.inTheRightRoom(creep, creep.memory._targetRoom) && creep.memory._targetPos) {
-        CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
-        let pos = new RoomPosition(
-          creep.memory._targetPos.x,
-          creep.memory._targetPos.y,
-          creep.memory._targetPos.roomName
-        );
-        return Traveler.travelTo(creep, pos);
-      } else if (!target) {
-        CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
-        return ERR_NOTHING_TO_DO;
-      }
-      if (creep.pos.isNearTo(target.pos)) {
-        creep.harvest(target);
-      } else {
-        Traveler.travelTo(creep, target.pos);
-      }
-      tryToSwitchMode(creep);
     }
     // drop mode
     else {
       // Find container
-      if (!creep.memory.containerId) {
-        let container = <StructureContainer>creep.pos.findClosestByPath(FIND_STRUCTURES, {
-          filter: function (s) {
-            return s.structureType === STRUCTURE_CONTAINER;
-          }
-        });
-        if (container) {
-          creep.memory.containerId = container.id;
-          creep.memory._containerPos = container.pos;
-          creep.memory._containerRoom = container.room.name;
-        }
+      statutOfExecution = Tasks.transfertToContainer(creep);
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
+        tryToSwitchMode(creep);
+        CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
+        return OK;
       }
-
-      // transfer to CONTAINER
-      if (creep.memory.containerId) {
-        let container = Game.getObjectById(creep.memory.containerId);
-        if (container && container.store[RESOURCE_ENERGY] !== container.store.getCapacity()) {
-          if (creep.pos.isNearTo(container.pos)) {
-            tryToSwitchMode(creep);
-            CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
-            return creep.transfer(container, RESOURCE_ENERGY);
-          } else {
-            CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
-            return Traveler.travelTo(creep, container.pos);
-          }
-        } else {
-          creep.memory._containerRoom = undefined;
-        }
-      }
-
       // than, go to STORAGE
       statutOfExecution = Tasks.transfertToStorage(creep, roomHome);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
@@ -181,7 +130,7 @@ const roleHarvester = {
 
       // than do to TRANSFERT somthing
       statutOfExecution = Tasks.transfertToEssentialStructure(creep, roomHome);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
@@ -189,7 +138,7 @@ const roleHarvester = {
 
       // than do to BUILD somthing
       statutOfExecution = Tasks.buildSomething(creep, roomHome);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
@@ -197,12 +146,13 @@ const roleHarvester = {
 
       // no urgence, can build something in the room
       statutOfExecution = Tasks.upgradeController(creep, roomHome.controller);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
       }
     }
+    tryToSwitchMode(creep);
     CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
     return statutOfExecution;
   }

@@ -1,12 +1,12 @@
+import { Infantry } from "../roles/army/infantry";
 import { Builder } from "../roles/colony/builider";
+import { Carrier } from "../roles/colony/carrier";
 import { Colonist } from "../roles/colony/colonist";
-import { Logger } from "./Logger";
-import { Traveler } from "./Traveler";
-import { ERR_NOTHING_TO_DO } from "./ConstantUtils";
-import { Upgrader } from "../roles/colony/upgrader";
 import { Harvester } from "../roles/colony/harvester";
 import { Repairman } from "../roles/colony/repairman";
-import { Carrier } from "../roles/colony/carrier";
+import { Upgrader } from "../roles/colony/upgrader";
+import { ERR_NOTHING_TO_DO, ERR_NO_TARGET } from "./ConstantUtils";
+import { Logger } from "./Logger";
 
 /**
  * @author neogost
@@ -40,9 +40,17 @@ export class CreepUtils {
   }
 
   public static inTheRightRoom(
-    creep: Colonist | Harvester | Upgrader | Builder | Repairman | Carrier,
+    creep: Colonist | Harvester | Upgrader | Builder | Repairman | Carrier | Infantry,
     targetedRoom: string | undefined
   ): boolean {
     return creep.room.name === targetedRoom;
+  }
+
+  public static canDoSomething(statutOfExecution: number): boolean {
+    return (
+      statutOfExecution !== ERR_NO_TARGET &&
+      statutOfExecution !== ERR_NOTHING_TO_DO &&
+      statutOfExecution !== ERR_NO_TARGET
+    );
   }
 }

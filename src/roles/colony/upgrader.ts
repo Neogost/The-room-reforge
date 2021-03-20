@@ -1,13 +1,6 @@
 import { Tasks } from "../../task/Tasks";
-import {
-  ERR_NOTHING_TO_DO,
-  ERR_NO_WORKING_STATION,
-  CONTROLER_TYPE,
-  SOURCE_TYPE,
-  ERR_NO_TARGET
-} from "../../utils/ConstantUtils";
+import { ERR_NOTHING_TO_DO, ERR_NO_TARGET } from "../../utils/ConstantUtils";
 import { CreepUtils } from "../../utils/CreepUtils";
-import { Traveler } from "../../utils/Traveler";
 /**
  * @description A upgrader is there to upgrade the structure controller of the colony.
  * This creep is able to perform several types of actions such as harvesting, upgrade and reload.
@@ -94,25 +87,15 @@ const roleUpgrader = {
     }
     // Refill
     else {
-      // Check if there are a link available
-      if (creep.memory.linkId) {
-        let link = Game.getObjectById(creep.memory.linkId);
-        // There is some energy in the link ?
-        if (link && link.store[RESOURCE_ENERGY] != 0) {
-          // try to use it
-          if (creep.pos.isNearTo(link)) {
-            tryToSwitchMode(creep);
-            CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
-            statutOfExecution = creep.withdraw(link, RESOURCE_ENERGY);
-          } else {
-            CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
-            return Traveler.travelTo(creep, link.pos);
-          }
-        }
+      statutOfExecution = Tasks.refillToLink(creep, roomHome);
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
+        tryToSwitchMode(creep);
+        CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
+        return OK;
       }
       // than, go to STORAGE
       statutOfExecution = Tasks.refillToStorage(creep, roomHome);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;

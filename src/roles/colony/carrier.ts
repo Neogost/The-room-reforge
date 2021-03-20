@@ -1,4 +1,4 @@
-import { ERR_NOTHING_TO_DO, ERR_NO_TARGET, CREEP_MANAGER } from "../../utils/ConstantUtils";
+import { ERR_NO_TARGET, CREEP_MANAGER } from "../../utils/ConstantUtils";
 import { Traveler } from "../../utils/Traveler";
 import { CreepUtils } from "../../utils/CreepUtils";
 import { Tasks } from "../../task/Tasks";
@@ -135,7 +135,7 @@ const roleCarrier = {
       // Refill the storage only if an manager do the job to transfert energy
       if (managerAvailable.length > 0) {
         statutOfExecution = Tasks.transfertToStorage(creep, roomHome);
-        if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+        if (CreepUtils.canDoSomething(statutOfExecution)) {
           tryToSwitchMode(creep);
           CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
           return OK;
@@ -143,14 +143,14 @@ const roleCarrier = {
       }
 
       statutOfExecution = Tasks.transfertToEssentialStructure(creep, roomHome);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
       }
 
       statutOfExecution = Tasks.transfertToStorage(creep, roomHome);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;

@@ -1,4 +1,3 @@
-import { ERR_NOTHING_TO_DO, ERR_NO_TARGET } from "../../utils/ConstantUtils";
 import { CreepUtils } from "../../utils/CreepUtils";
 import { Tasks } from "../../task/Tasks";
 
@@ -80,7 +79,7 @@ const roleColonist = {
     if (buildMode) {
       // need help, transfert energy to essential structure
       statutOfExecution = Tasks.transfertToEssentialStructure(creep, room);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
@@ -88,7 +87,7 @@ const roleColonist = {
 
       // Inspect if the controller need to be upgrade
       statutOfExecution = Tasks.upgradeController(creep, room.controller);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
@@ -96,14 +95,14 @@ const roleColonist = {
 
       // no urgence, can build something in the room
       statutOfExecution = Tasks.buildSomething(creep, room);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;
       }
 
       statutOfExecution = Tasks.transfertToStorage(creep, room);
-      if (statutOfExecution != ERR_NO_TARGET && statutOfExecution !== ERR_NOTHING_TO_DO) {
+      if (CreepUtils.canDoSomething(statutOfExecution)) {
         tryToSwitchMode(creep);
         CreepUtils.calculateCPUUsed(creep, analyseCPUStart);
         return OK;

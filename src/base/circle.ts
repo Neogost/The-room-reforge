@@ -1,4 +1,3 @@
-import { Logger } from "../utils/Logger";
 /**
  * Class who execute the task for build a circle base.
  * Each level of the RCL unlock element
@@ -117,9 +116,9 @@ export class BaseCircle {
     this.level4.set(STRUCTURE_ROAD + ".48", new RoomPosition(this.center.x + 5, this.center.y - 3, this.room.name));
     this.level4.set(STRUCTURE_ROAD + ".49", new RoomPosition(this.center.x + 4, this.center.y + 7, this.room.name));
 
-    this.level5.set(STRUCTURE_TOWER + ".1", new RoomPosition(this.center.x, this.center.y + 2, this.room.name));
-    this.level5.set(STRUCTURE_LINK + ".1", new RoomPosition(this.center.x, this.center.y + 2, this.room.name));
-    this.level5.set(STRUCTURE_EXTENSION + ".1", new RoomPosition(this.center.x - 1, this.center.y - 1, this.room.name));
+    this.level5.set(STRUCTURE_TOWER + ".1", new RoomPosition(this.center.x, this.center.y - 2, this.room.name));
+    this.level5.set(STRUCTURE_LINK + ".1", new RoomPosition(this.center.x - 1, this.center.y - 1, this.room.name));
+    this.level5.set(STRUCTURE_EXTENSION + ".1", new RoomPosition(this.center.x + 2, this.center.y - 2, this.room.name));
     this.level5.set(STRUCTURE_EXTENSION + ".2", new RoomPosition(this.center.x + 1, this.center.y - 5, this.room.name));
     this.level5.set(STRUCTURE_EXTENSION + ".3", new RoomPosition(this.center.x + 1, this.center.y - 4, this.room.name));
     this.level5.set(STRUCTURE_EXTENSION + ".4", new RoomPosition(this.center.x + 1, this.center.y - 3, this.room.name));
